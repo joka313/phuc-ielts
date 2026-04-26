@@ -24,6 +24,12 @@
           chalk:  '#e2dfd6',
           stone:  '#888888',
           mist:   '#f0ede6',
+          /* IELTS exam UI tones */
+          examnav:'#3d4453',
+          examfoot:'#454c5b',
+          examband:'#e9ecef',
+          examhi: '#cfe6ff',
+          exambr: '#4a96e0',
         },
         fontFamily: {
           sans:  ['Inter', 'system-ui', 'sans-serif'],
@@ -48,24 +54,22 @@
   *  { box-sizing: border-box; }
   html, body { background:#f6f5f0; color:#0f1411; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
   .font-display { font-family:'Lora', Georgia, serif; }
-  /* Inputs */
   .input    { @apply w-full px-3 py-2.5 rounded-lg border border-chalk bg-white text-[14px] outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/15; }
   .input-sm { @apply px-2 py-1 rounded-md border border-chalk bg-white text-[13px] outline-none focus:border-forest focus:ring-2 focus:ring-forest/15; }
-  /* Buttons */
   .btn       { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-chalk bg-white text-[13px] font-medium text-ink hover:bg-bone hover:border-stone/40 transition; }
   .btn-dark  { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-forest text-white text-[13px] font-medium hover:bg-forest/90 transition disabled:opacity-50 disabled:cursor-not-allowed; }
   .btn-green { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-moss text-white text-[13px] font-medium hover:bg-moss/90 transition; }
   .btn-ghost { @apply inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-stone hover:bg-mist hover:text-ink transition; }
   .btn-icon  { @apply inline-flex items-center justify-center w-8 h-8 rounded-md border border-chalk bg-white hover:bg-bone transition; }
-  /* Card */
   .card { @apply bg-white rounded-xl border border-chalk shadow-card; }
-  /* Label */
   .lbl       { @apply text-[10.5px] font-semibold tracking-[0.08em] uppercase text-moss; }
   .lbl-amber { @apply text-[10.5px] font-semibold tracking-[0.08em] uppercase text-amber; }
   .lbl-mute  { @apply text-[10.5px] font-semibold tracking-[0.08em] uppercase text-stone; }
-  /* Tabs */
-  .tab     { @apply px-5 py-3.5 text-[13.5px] font-medium text-stone border-b-2 border-transparent hover:text-ink transition cursor-pointer; }
-  .tab.act { @apply text-forest border-forest; }
+  /* Centered prominent tabs (segmented control) */
+  .seg-wrap { @apply inline-flex items-center bg-mist rounded-full p-1 shadow-inner; }
+  .seg      { @apply px-4 sm:px-5 py-2 rounded-full text-[13px] font-medium text-stone hover:text-ink transition cursor-pointer flex items-center gap-1.5; }
+  .seg.act  { @apply bg-white text-forest shadow-card; }
+  .seg.act .seg-dot { @apply w-1.5 h-1.5 rounded-full bg-moss; }
   /* Highlight colors */
   mark.h-yellow{ background:var(--hl-yellow); border-bottom:1.5px solid var(--hl-yellow-bd); padding:0 1px; border-radius:2px; }
   mark.h-green { background:var(--hl-green);  border-bottom:1.5px solid var(--hl-green-bd);  padding:0 1px; border-radius:2px; }
@@ -74,35 +78,47 @@
   mark.h-orange{ background:var(--hl-orange); border-bottom:1.5px solid var(--hl-orange-bd); padding:0 1px; border-radius:2px; }
   mark[data-hid]{ cursor:pointer; }
   mark[data-hid]:hover{ filter:brightness(0.96); }
-  /* Selectable text body */
   .selectable { user-select:text; }
-  /* Skeleton */
   .skel { background:linear-gradient(90deg,#ececec 0%,#f5f5f5 50%,#ececec 100%); background-size:200% 100%; animation:skel 1.4s infinite; border-radius:6px; }
   @keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-  /* Spinner */
   .spinner { width:24px; height:24px; border:2.5px solid #e2dfd6; border-top-color:#1a3a2e; border-radius:50%; animation:spin .7s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg) } }
-  /* Toast */
   .toast { @apply px-4 py-2.5 rounded-lg text-[13px] font-medium shadow-float; }
-  /* Modal */
   .modal-bg { position:fixed; inset:0; background:rgba(15,20,17,0.5); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; z-index:200; padding:1rem; }
-  /* Floating highlight toolbar */
   .hl-toolbar { position:absolute; z-index:300; @apply bg-white rounded-lg shadow-float border border-chalk px-2 py-1.5 flex items-center gap-1; }
   .hl-swatch { width:22px; height:22px; border-radius:6px; cursor:pointer; transition:transform .12s; border:1.5px solid rgba(0,0,0,0.08); }
   .hl-swatch:hover { transform:scale(1.12); }
-  /* Smooth scroll inside split panes */
   .pane-scroll { overflow-y:auto; scrollbar-width:thin; scrollbar-color:#cdc8b8 transparent; }
   .pane-scroll::-webkit-scrollbar { width:8px; }
   .pane-scroll::-webkit-scrollbar-thumb { background:#cdc8b8; border-radius:4px; }
-  /* Question hover anchor */
   .q-anchor { scroll-margin-top:140px; }
-  /* Result chips */
   .chip-correct { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[12px] font-semibold; }
   .chip-wrong   { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 text-[12px] font-semibold; }
   .chip-empty   { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-stone-100 text-stone-500 text-[12px] font-medium; }
-  /* Animate enter */
   .fade-in { animation:fadeIn .25s ease-out; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+  /* IELTS Mock Test exam shell */
+  .exam-shell  { background:#e9ecef; min-height:100vh; }
+  .exam-header { background:#3d4453; color:#fff; padding:8px 16px; display:flex; align-items:center; gap:14px; font-size:13px; }
+  .exam-header .ielts-logo { color:#e74c3c; font-weight:700; letter-spacing:.04em; font-size:15px; }
+  .exam-strip  { background:#fff; border-bottom:1px solid #d6d9de; padding:10px 18px; }
+  .exam-foot   { background:#454c5b; color:#fff; padding:8px 14px; display:flex; align-items:center; gap:10px; }
+  .exam-pill   { display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:24px; padding:0 8px; border-radius:4px; background:#fff; color:#3d4453; font-size:12px; font-weight:600; cursor:pointer; }
+  .exam-pill.act { background:#fff; color:#3d4453; box-shadow:inset 0 -3px 0 #1a3a2e; }
+  .exam-pill.done{ background:#dff5e6; color:#0f6e56; }
+  .exam-arrow  { width:32px; height:28px; border-radius:4px; background:#fff; color:#3d4453; display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; }
+  .exam-check  { background:#0f6e56; color:#fff; width:32px; height:28px; border-radius:4px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+  /* Selected answer "thanh xanh" full-width style */
+  .ans-row    { @apply flex items-start gap-2.5 px-3 py-2 rounded-md cursor-pointer transition; }
+  .ans-row:hover{ background:#f4f6f8; }
+  .ans-row.sel{ background:var(--hl-blue); border-left:3px solid var(--hl-blue-bd); padding-left:9px; }
+  .ans-row.sel-correct{ background:#dff5e6; border-left:3px solid #4cb87a; padding-left:9px; }
+  .ans-row.sel-wrong  { background:#ffe2e2; border-left:3px solid #e0606a; padding-left:9px; }
+  .q-block    { @apply mb-5 pb-1; }
+  .q-num-pill { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#3d4453; color:#fff; font-size:11px; font-weight:600; margin-right:8px; }
+  /* Vertical resize handle visual (not draggable yet) */
+  .pane-divider{ width:14px; background:#e9ecef; border-left:1px solid #d6d9de; border-right:1px solid #d6d9de; display:flex; align-items:center; justify-content:center; }
+  .pane-divider .grip{ width:4px; height:36px; background:#bcc3cc; border-radius:2px; }
 </style>
 </head>
 <body>
@@ -122,7 +138,7 @@ const { createClient } = window.supabase
 const db = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 /* =====================================================================
-   CONTENT — passages, exercises, weeks
+   CONTENT
    ===================================================================== */
 const TFNG = ['TRUE','FALSE','NOT GIVEN']
 const HL_COLORS = ['yellow','green','blue','pink','orange']
@@ -143,32 +159,32 @@ const READING_PASSAGE_HOMEWORK = [
   'Modern research has confirmed many traditional beliefs about tea\'s health benefits. Green tea contains powerful antioxidants called catechins, which may reduce the risk of certain cancers. Black tea has been linked to improved cardiovascular health, while herbal infusions offer various therapeutic properties without caffeine.'
 ]
 
-/* answer: string | string[]  (string[] = các đáp án đều được chấp nhận)
-   mcq-multi: chọn N letter, không quan tâm thứ tự, answers = ['A','D'] */
 const READING_INCLASS = {
   passageTitle: 'Urban Farming Revolution',
+  partLabel: 'Part 1',
+  partInstruction: 'Read the text and answer questions 1–14.',
   sections: [
     { id:'s1', type:'gap-fill', title:'Questions 1–5',
       instruction:'Complete the notes below. Choose NO MORE THAN TWO WORDS from the passage for each answer.',
       noteTitle:'Urban Farming – Key Points',
       items:[
-        {num:1, before:'Vertical farms use only', after:'of the land area of conventional farms.', answer:'1%', explain:'Đoạn 2 nói "vertical farm... can produce the same yield... using just 1% of the land area".'},
+        {num:1, before:'Vertical farms use only', after:'of the land area of conventional farms.', answer:'1%', explain:'Đoạn 2: "vertical farm... can produce the same yield... using just 1% of the land area".'},
         {num:2, before:'Hydroponic systems can reduce', after:'usage by up to 95%.', answer:'water'},
         {num:3, before:'Urban farms cut carbon emissions by eliminating long-distance', after:'.', answer:'transportation'},
         {num:4, before:'Low-income areas with little fresh food access are called food', after:'.', answer:'deserts'},
         {num:5, before:'Urban farming is predicted to', after:'rural agriculture, not replace it.', answer:'complement'}
       ]},
     { id:'s2', type:'tfng', title:'Questions 6–10',
-      instruction:'Do the following statements agree with the information given in the reading passage?',
+      instruction:'Choose TRUE if the statement agrees with the information given in the text, FALSE if the statement contradicts the information, or choose NOT GIVEN if there is no information on this.',
       items:[
-        {num:6, statement:'Urban farming has always been considered a mainstream agricultural approach.', answer:'FALSE', explain:'Mở bài nói "began as a fringe movement".'},
+        {num:6, statement:'Urban farming has always been considered a mainstream agricultural approach.', answer:'FALSE', explain:'Mở bài: "began as a fringe movement".'},
         {num:7, statement:'Vertical farms can match the output of conventional farms on a fraction of the land.', answer:'TRUE'},
         {num:8, statement:'High energy costs currently present a challenge for urban farms.', answer:'TRUE'},
         {num:9, statement:'All urban farm projects in Detroit have been financially profitable.', answer:'NOT GIVEN'},
         {num:10, statement:'Experts believe urban farms will eventually supply all food consumed in cities.', answer:'FALSE'}
       ]},
     { id:'s3', type:'mcq', title:'Questions 11–12',
-      instruction:'Choose the correct letter, A, B, C or D.',
+      instruction:'Choose the correct answer.',
       items:[
         {num:11, question:'What does the writer say about hydroponic systems?',
           options:[{l:'A',t:'They require more land than traditional farming.'},{l:'B',t:'They dramatically reduce water use by recycling nutrients.'},{l:'C',t:'They were first developed in Chicago.'},{l:'D',t:'They are too expensive for most urban farms.'}],
@@ -177,9 +193,8 @@ const READING_INCLASS = {
           options:[{l:'A',t:'It will completely replace conventional farming.'},{l:'B',t:'It will focus only on grain production.'},{l:'C',t:'It will work alongside rural agriculture as a complementary system.'},{l:'D',t:'It will be discontinued due to high costs.'}],
           answer:'C'}
       ]},
-    /* Demo: dạng "choose TWO letters" — đáp án [A,D] hay [D,A] đều đúng */
     { id:'s4', type:'mcq-multi', title:'Questions 13–14',
-      instruction:'Choose TWO letters, A–E. Which TWO benefits of urban farms does the writer mention?',
+      instruction:'Choose TWO correct answers. Which TWO benefits of urban farms does the writer mention?',
       nums:[13,14], pickN:2,
       options:[
         {l:'A', t:'They reduce the carbon emissions from food transport.'},
@@ -196,6 +211,8 @@ const READING_INCLASS = {
 
 const READING_HOMEWORK = {
   passageTitle: 'The Story of Tea',
+  partLabel: 'Part 1',
+  partInstruction: 'Read the text and answer questions 1–8.',
   sections: [
     { id:'s1', type:'gap-fill', title:'Questions 1–4',
       instruction:'Complete the summary below. Choose NO MORE THAN TWO WORDS from the passage for each answer.',
@@ -207,7 +224,7 @@ const READING_HOMEWORK = {
         {num:4, before:'The British East India Company set up plantations in India to break China\'s', after:'.', answer:'monopoly'}
       ]},
     { id:'s2', type:'tfng', title:'Questions 5–8',
-      instruction:'Do the following statements agree with the information given in the passage?',
+      instruction:'Choose TRUE / FALSE / NOT GIVEN.',
       items:[
         {num:5, statement:'Tea is currently the most popular drink in the world.', answer:'FALSE'},
         {num:6, statement:'The Japanese tea ceremony emphasises mindfulness.', answer:'TRUE'},
@@ -219,6 +236,8 @@ const READING_HOMEWORK = {
 
 const LISTENING_INCLASS = {
   formTitle: 'Transport Survey',
+  partLabel: 'Part 1',
+  partInstruction: 'Listen and complete the form below.',
   audioUrl: 'https://www.w3schools.com/html/horse.mp3',
   formItems:[
     {type:'section', text:'Transport survey', isMain:true},
@@ -243,6 +262,8 @@ const LISTENING_INCLASS = {
 
 const LISTENING_HOMEWORK = {
   formTitle: 'Library Membership',
+  partLabel: 'Part 1',
+  partInstruction: 'Listen and complete the form below.',
   audioUrl: 'https://www.w3schools.com/html/horse.mp3',
   formItems:[
     {type:'section', text:'New member registration', isMain:true},
@@ -293,6 +314,36 @@ const WEEKS = [
   { id:'l8',course:'Listening',wk:'Tuần 8',title:'Comprehensive Review',subtitle:'',live:false},
 ]
 
+/* COURSES — học viên thấy danh sách khoá học, click vào mới ra outline */
+const COURSES = [
+  {
+    id:'reading-foundation',
+    title:'IELTS Reading Foundation',
+    tagline:'Khoá Reading 8 tuần',
+    icon:'📖',
+    level:'Foundation · Band 4.5 → 6.5',
+    duration:'8 tuần',
+    desc:'Hệ thống 8 dạng câu hỏi Reading từ cơ bản đến nâng cao. Phương pháp Parallel Reading giúp tăng tốc độ và độ chính xác.',
+    bgClass:'from-emerald-700 to-emerald-900',
+    accent:'emerald',
+    weekIds: ['r1','r2','r3','r4','r5','r6','r7','r8']
+  },
+  {
+    id:'listening-foundation',
+    title:'IELTS Listening Foundation',
+    tagline:'Khoá Listening 8 tuần',
+    icon:'🎧',
+    level:'Foundation · Band 4.5 → 6.5',
+    duration:'8 tuần',
+    desc:'8 dạng câu hỏi Listening + hệ thống dự đoán giúp tránh các bẫy phổ biến trong Part 1–4.',
+    bgClass:'from-amber-700 to-amber-900',
+    accent:'amber',
+    weekIds: ['l1','l2','l3','l4','l5','l6','l7','l8']
+  }
+]
+function getCourse(cid){ return COURSES.find(c => c.id === cid) }
+function courseWeeks(course){ return course.weekIds.map(id => getWeek(id)).filter(Boolean) }
+
 /* =====================================================================
    UTILITIES
    ===================================================================== */
@@ -303,8 +354,6 @@ const getEx   = (week, type) => type === 'inClass' ? week.inClass : week.homewor
 const norm    = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ')
 
 function listAllItems(ex){
-  /* Trả về flat list các "ô đáp án":
-     - { num, kind:'fill'|'tfng'|'mcq'|'mcq-multi', answer, explain?, qText, options? } */
   const out = []
   if (!ex) return out
   if (ex.formItems){
@@ -315,18 +364,13 @@ function listAllItems(ex){
   if (ex.sections){
     ex.sections.forEach(sec => {
       if (sec.type === 'mcq-multi'){
-        out.push({
-          nums: sec.nums, kind:'mcq-multi', answers: sec.answers, pickN: sec.pickN,
-          explain: sec.explain, qText: sec.instruction, options: sec.options
-        })
+        out.push({ nums: sec.nums, kind:'mcq-multi', answers: sec.answers, pickN: sec.pickN, explain: sec.explain, qText: sec.instruction, options: sec.options })
       } else {
         sec.items.forEach(it => {
           const kind = sec.type === 'tfng' ? 'tfng' : sec.type === 'mcq' ? 'mcq' : 'fill'
-          out.push({
-            num: it.num, kind, answer: it.answer, explain: it.explain,
+          out.push({ num: it.num, kind, answer: it.answer, explain: it.explain,
             qText: it.statement || it.question || `${it.before||''} ___ ${it.after||''}`.trim(),
-            options: it.options
-          })
+            options: it.options })
         })
       }
     })
@@ -335,10 +379,8 @@ function listAllItems(ex){
 }
 
 function countQs(ex){
-  const items = listAllItems(ex)
-  return items.reduce((acc, it) => acc + (it.kind === 'mcq-multi' ? it.nums.length : 1), 0)
+  return listAllItems(ex).reduce((acc, it) => acc + (it.kind === 'mcq-multi' ? it.nums.length : 1), 0)
 }
-
 function buildEmptyAnswers(ex){
   const a = {}
   listAllItems(ex).forEach(it => {
@@ -347,12 +389,8 @@ function buildEmptyAnswers(ex){
   })
   return a
 }
-
 function isAnswerCorrect(item, ans){
   if (item.kind === 'mcq-multi'){
-    /* ans là object hoặc array các letter của các num. Quy ước:
-       lưu trong answers state: cho mcq-multi, mỗi num giữ 1 letter,
-       nhưng đáp án không quan tâm thứ tự → so set */
     const got = item.nums.map(n => norm(ans[n])).filter(Boolean).sort()
     const want = item.answers.map(norm).sort()
     if (got.length !== want.length) return false
@@ -363,22 +401,21 @@ function isAnswerCorrect(item, ans){
   if (Array.isArray(item.answer)) return item.answer.some(x => norm(x) === a)
   return norm(item.answer) === a
 }
-
 function autoGrade(ex, answers, overrideCorrect = {}){
-  /* Trả về { marks: {num: 'correct'|'wrong'}, score, total } */
   const marks = {}
   let score = 0, total = 0
   listAllItems(ex).forEach(item => {
     if (item.kind === 'mcq-multi'){
       total += item.nums.length
-      const ok = isAnswerCorrect({...item, answers: overrideCorrect[item.nums.join(',')] ? overrideCorrect[item.nums.join(',')].split(',') : item.answers}, answers)
+      const itemEff = overrideCorrect[item.nums.join(',')]
+        ? { ...item, answers: String(overrideCorrect[item.nums.join(',')]).split(/[, ]+/).filter(Boolean) }
+        : item
+      const ok = isAnswerCorrect(itemEff, answers)
       item.nums.forEach(n => marks[n] = ok ? 'correct' : 'wrong')
       if (ok) score += item.nums.length
     } else {
       total += 1
-      const itemEff = overrideCorrect[item.num]
-        ? { ...item, answer: overrideCorrect[item.num] }
-        : item
+      const itemEff = overrideCorrect[item.num] ? { ...item, answer: overrideCorrect[item.num] } : item
       const ok = isAnswerCorrect(itemEff, answers)
       marks[item.num] = ok ? 'correct' : 'wrong'
       if (ok) score += 1
@@ -401,19 +438,14 @@ async function dbLoadStudentData(studentId){
     db.from('submissions').select('week_id,sub_type,answers,auto_marks,score,total,submitted_at').eq('student_id', studentId),
     db.from('theory_progress').select('week_id,completed').eq('student_id', studentId)
   ])
-  const subs = {}
-  ;(subsRes.data || []).forEach(r => {
-    subs[r.week_id + '-' + r.sub_type] = { answers:r.answers, auto_marks:r.auto_marks, score:r.score, total:r.total, submittedAt:r.submitted_at }
-  })
-  const prog = {}
-  ;(progRes.data || []).forEach(r => { prog[r.week_id] = r.completed })
+  const subs = {}; (subsRes.data||[]).forEach(r => { subs[r.week_id+'-'+r.sub_type] = { answers:r.answers, auto_marks:r.auto_marks, score:r.score, total:r.total, submittedAt:r.submitted_at } })
+  const prog = {}; (progRes.data||[]).forEach(r => { prog[r.week_id] = r.completed })
   return { subs, prog }
 }
 async function dbSubmit(studentId, weekId, subType, answers, autoMarks, score, total){
   const { error } = await db.from('submissions').upsert({
     student_id:studentId, week_id:weekId, sub_type:subType,
-    answers, auto_marks:autoMarks, score, total,
-    submitted_at: new Date().toISOString()
+    answers, auto_marks:autoMarks, score, total, submitted_at: new Date().toISOString()
   }, { onConflict:'student_id,week_id,sub_type' })
   if (error) throw error
 }
@@ -431,10 +463,7 @@ async function dbLoadAllStudents(){
 async function dbLoadStudentSubs(studentId){
   const { data, error } = await db.from('submissions').select('week_id,sub_type,answers,auto_marks,score,total,submitted_at').eq('student_id', studentId)
   if (error) throw error
-  const subs = {}
-  ;(data || []).forEach(r => {
-    subs[r.week_id + '-' + r.sub_type] = { answers:r.answers, auto_marks:r.auto_marks, score:r.score, total:r.total, submittedAt:r.submitted_at }
-  })
+  const subs = {}; (data||[]).forEach(r => { subs[r.week_id+'-'+r.sub_type] = { answers:r.answers, auto_marks:r.auto_marks, score:r.score, total:r.total, submittedAt:r.submitted_at } })
   return subs
 }
 async function dbLoadStudentTheory(studentId){
@@ -482,42 +511,33 @@ async function dbResolveShareToken(token){
    STATE
    ===================================================================== */
 const S = {
-  view: 'login',           // login | s-home | week | result | t-home | t-student | t-review | shared
-  user: null,              // { role:'student'|'teacher', id, name }
+  view: 'login',
+  user: null,
   loading: false,
-
   /* student data */
   subs: {}, prog: {},
-
-  /* teacher data */
-  students: [],
-  search: '', filter: 'all',  // all | submitted | pending
-  selStudent: null, selStudentSubs: {}, selStudentProg: {},
-
-  /* week / exercise context */
+  /* nav */
+  selCourse: null,
   selWid: null, activeTab: 'theory',
+  activePart: 0,                  /* current part index in exercise nav */
+  /* answers & submit */
   ansIC: {}, ansHW: {},
   submittedIC: false, submittedHW: false,
-  resultType: null,        // 'inClass'|'homework' khi vào view result
-  shareUrl: null,
-  confirmType: null,
-  expandExplain: {},       // { num: bool }
-
+  resultType: null, shareUrl: null, confirmType: null,
+  expandExplain: {},
   /* review (teacher) */
   revType: 'inClass',
   rev: { marks:{}, comments:{}, correct_answers:{}, highlights:[] },
-  revAuto: {},             // auto_marks gốc của student
-  revAnswers: {},          // student answers
-  highlights: [],          // free-selection highlights for current review
-
+  revAuto: {}, revAnswers: {},
+  /* highlights — dùng cho cả student và teacher */
+  highlights: [],
+  /* teacher dashboard */
+  students: [], search: '',
+  selStudent: null, selStudentSubs: {}, selStudentProg: {},
   /* shared view */
   sharedCtx: null,
 }
-
-function set(patch){
-  Object.assign(S, typeof patch === 'function' ? patch(S) : patch)
-  render()
-}
+function set(patch){ Object.assign(S, typeof patch === 'function' ? patch(S) : patch); render() }
 
 /* =====================================================================
    TOAST
@@ -526,48 +546,27 @@ let _toastTimer = null
 function toast(msg, type='success'){
   if (_toastTimer) clearTimeout(_toastTimer)
   const el = document.getElementById('toast-area')
-  const cls = type === 'error' ? 'bg-rose-100 text-rose-800' : type === 'info' ? 'bg-stone-800 text-white' : 'bg-emerald-100 text-emerald-800'
+  const cls = type==='error' ? 'bg-rose-100 text-rose-800' : type==='info' ? 'bg-stone-800 text-white' : 'bg-emerald-100 text-emerald-800'
   el.innerHTML = `<div class="toast ${cls} fade-in">${esc(msg)}</div>`
   _toastTimer = setTimeout(() => { el.innerHTML = '' }, 3200)
 }
 
 /* =====================================================================
-   HIGHLIGHT ENGINE
-   - Mỗi vùng highlightable: <div class="selectable" data-loc="...">{plain text}</div>
-   - On mouseup: nếu có selection nằm trong 1 container .selectable
-       → tính start/end offset trong plain text
-       → hiện toolbar nổi với 5 màu
-   - Render: splice <mark> tags theo highlights[]
+   HIGHLIGHT ENGINE  (cho cả Student và Teacher)
    ===================================================================== */
-
 function getPlainOffsetWithin(container, node, offset){
   if (!container.contains(node)) return -1
   let total = 0
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null)
   let cur
-  while ((cur = walker.nextNode())){
-    if (cur === node) return total + offset
-    total += cur.nodeValue.length
-  }
+  while ((cur = walker.nextNode())){ if (cur === node) return total + offset; total += cur.nodeValue.length }
   return -1
 }
-function getPlainText(container){
-  let txt = ''
-  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null)
-  let cur
-  while ((cur = walker.nextNode())) txt += cur.nodeValue
-  return txt
-}
-
 function renderTextWithHighlights(plainText, highlights){
   if (!highlights || highlights.length === 0) return esc(plainText)
-  /* Sort by start asc; resolve overlaps by skipping later ones that overlap */
   const sorted = [...highlights].sort((a,b) => a.start_offset - b.start_offset)
-  const safe = []
-  let lastEnd = -1
-  sorted.forEach(h => {
-    if (h.start_offset >= lastEnd){ safe.push(h); lastEnd = h.end_offset }
-  })
+  const safe = []; let lastEnd = -1
+  sorted.forEach(h => { if (h.start_offset >= lastEnd){ safe.push(h); lastEnd = h.end_offset } })
   let out = '', cursor = 0
   safe.forEach(h => {
     if (h.start_offset > cursor) out += esc(plainText.slice(cursor, h.start_offset))
@@ -579,10 +578,7 @@ function renderTextWithHighlights(plainText, highlights){
   if (cursor < plainText.length) out += esc(plainText.slice(cursor))
   return out
 }
-
-function clearHlToolbar(){
-  document.getElementById('hl-toolbar-area').innerHTML = ''
-}
+function clearHlToolbar(){ document.getElementById('hl-toolbar-area').innerHTML = '' }
 function showHlToolbar(rect, locKey, region, start, end){
   const area = document.getElementById('hl-toolbar-area')
   const top  = window.scrollY + rect.top - 44
@@ -590,216 +586,199 @@ function showHlToolbar(rect, locKey, region, start, end){
   const swatches = HL_COLORS.map(c =>
     `<div class="hl-swatch" style="background:var(--hl-${c})" title="${c}" onclick="addHlSelected('${c}','${esc(locKey)}','${region}',${start},${end})"></div>`
   ).join('')
-  area.innerHTML = `
-    <div class="hl-toolbar fade-in" style="top:${top}px;left:${left}px;transform:translateX(-50%)">
-      ${swatches}
-      <div class="w-px h-5 bg-chalk mx-1"></div>
-      <button class="btn-ghost text-[12px]" onclick="clearHlToolbar()">Đóng</button>
-    </div>`
+  area.innerHTML = `<div class="hl-toolbar fade-in" style="top:${top}px;left:${left}px;transform:translateX(-50%)">
+    ${swatches}
+    <div class="w-px h-5 bg-chalk mx-1"></div>
+    <button class="btn-ghost text-[12px]" onclick="clearHlToolbar()">Đóng</button>
+  </div>`
 }
-
+function canHighlightNow(){
+  if (!S.user) return false
+  /* Teacher trong review, hoặc Student khi đang làm bài / xem result */
+  if (S.user.role === 'teacher' && S.view === 't-review') return true
+  if (S.user.role === 'student' && (S.view === 'week' || S.view === 'result')) return true
+  return false
+}
 function onMouseUpHighlight(){
-  if (!S.user || S.user.role !== 'teacher') return    // chỉ GV được highlight
-  if (S.view !== 't-review') return
+  if (!canHighlightNow()){ clearHlToolbar(); return }
   const sel = window.getSelection()
   if (!sel || sel.rangeCount === 0 || sel.isCollapsed){ clearHlToolbar(); return }
   const range = sel.getRangeAt(0)
-  /* Tìm container .selectable bao chung */
   let node = range.commonAncestorContainer
   if (node.nodeType === 3) node = node.parentElement
   const container = node.closest('.selectable')
   if (!container){ clearHlToolbar(); return }
-  /* Cùng container cho cả start lẫn end */
   if (!container.contains(range.startContainer) || !container.contains(range.endContainer)){ clearHlToolbar(); return }
   const start = getPlainOffsetWithin(container, range.startContainer, range.startOffset)
   const end   = getPlainOffsetWithin(container, range.endContainer,   range.endOffset)
   if (start < 0 || end < 0 || end <= start){ clearHlToolbar(); return }
   const rect = range.getBoundingClientRect()
-  const locKey = container.dataset.loc
-  const region = container.dataset.region
-  showHlToolbar(rect, locKey, region, start, end)
+  showHlToolbar(rect, container.dataset.loc, container.dataset.region, start, end)
 }
-
 async function addHlSelected(color, locKey, region, start, end){
-  clearHlToolbar()
-  window.getSelection().removeAllRanges()
+  clearHlToolbar(); window.getSelection().removeAllRanges()
+  /* Xác định ngữ cảnh: student tự làm bài → student_id = mình; teacher → student đang chữa */
+  const isTeacher = S.user.role === 'teacher'
+  const studentId = isTeacher ? S.selStudent.id : S.user.id
+  const subType   = isTeacher ? S.revType : (S.activeTab === 'inClass' ? 'inClass' : (S.activeTab === 'homework' ? 'homework' : (S.resultType || 'inClass')))
   try {
     const row = await dbAddHighlight({
-      student_id: S.selStudent.id, week_id: S.selWid, sub_type: S.revType,
+      student_id: studentId, week_id: S.selWid, sub_type: subType,
       region, loc_key: locKey, start_offset: start, end_offset: end,
-      color, comment: '', created_by: 'teacher'
+      color, comment: '', created_by: isTeacher ? 'teacher' : studentId
     })
     set({ highlights: [...S.highlights, row] })
-    toast('Đã highlight')
-  } catch(e){ toast('Lỗi khi lưu highlight','error') }
+  } catch(e){ console.error(e); toast('Lỗi lưu highlight','error') }
 }
-
 async function hlClick(ev, id){
   ev.stopPropagation()
-  if (!S.user || S.user.role !== 'teacher') return
+  const h = S.highlights.find(x => x.id === id); if (!h) return
+  /* Student chỉ xoá được highlight của mình; teacher xoá tất cả */
+  const isTeacher = S.user.role === 'teacher'
+  if (!isTeacher && h.created_by !== S.user.id){ toast('Highlight này do giáo viên tạo','info'); return }
   if (!confirm('Xoá highlight này?')) return
-  try {
-    await dbDeleteHighlight(id)
-    set({ highlights: S.highlights.filter(h => h.id !== id) })
-  } catch(e){ toast('Lỗi xoá','error') }
+  try { await dbDeleteHighlight(id); set({ highlights: S.highlights.filter(x => x.id !== id) }) }
+  catch(e){ toast('Lỗi xoá','error') }
 }
-
-function highlightsFor(region, locKey){
-  return S.highlights.filter(h => h.region === region && h.loc_key === locKey)
-}
+function highlightsFor(region, locKey){ return S.highlights.filter(h => h.region === region && h.loc_key === locKey) }
 
 /* =====================================================================
-   RENDER HELPERS — passages, exercises, forms
+   RENDER HELPERS — passages, exercises (IELTS-style)
    ===================================================================== */
 function passageHTML(paras, opts = {}){
-  const region = 'passage'
   return paras.map((p, i) => {
     const locKey = `p-${i}`
-    const hls = opts.withHighlights ? highlightsFor(region, locKey) : []
-    const inner = renderTextWithHighlights(p, hls)
-    return `<p class="selectable text-[14.5px] leading-[1.85] text-ink mb-3" data-region="${region}" data-loc="${locKey}">${inner}</p>`
+    const hls = opts.withHighlights ? highlightsFor('passage', locKey) : []
+    return `<p class="selectable text-[14.5px] leading-[1.85] text-ink mb-3.5" data-region="passage" data-loc="${locKey}">${renderTextWithHighlights(p, hls)}</p>`
   }).join('')
 }
-
 function selectableInline(text, region, locKey, opts = {}){
   const hls = opts.withHighlights ? highlightsFor(region, locKey) : []
   return `<span class="selectable" data-region="${region}" data-loc="${locKey}">${renderTextWithHighlights(text, hls)}</span>`
 }
+function explainBlock(item, opts){
+  if (!opts.showExplain || !item.explain) return ''
+  const k = String(item.num)
+  const expanded = S.expandExplain[k]
+  return `<div class="mt-2">
+    <button class="btn-ghost text-[12px]" onclick="toggleExplain('${k}')">${expanded?'▾':'▸'} Giải thích</button>
+    ${expanded ? `<div class="mt-1 ml-2 pl-3 border-l-2 border-gold/60 text-[12.5px] text-ink leading-[1.6] bg-amber-50/40 py-2 rounded-r">${esc(item.explain)}</div>` : ''}
+  </div>`
+}
 
-/* Render section (student view) */
+/* IELTS-style section renderer: section header (Questions X-Y + instruction), question blocks */
 function renderSection(sec, answers, submitted, role, opts = {}){
-  const showCorrect = opts.showCorrect          // hiện màu chấm
-  const marks = opts.marks || {}
-  const correctOverride = opts.correctOverride || {}
+  const showCorrect = opts.showCorrect, marks = opts.marks || {}, correctOverride = opts.correctOverride || {}
   const hl = opts.withHighlights
   const region = 'questions'
 
-  const inputBox = (num, val, placeholder='') => {
-    const m = marks[num]
-    const ringCls = m === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
-                    : m === 'wrong' ? 'border-rose-500 bg-rose-50 text-rose-800' : ''
-    const dis = submitted ? 'disabled' : ''
-    const oninput = submitted ? '' : `oninput="setAns('${role}',${num},this.value)"`
-    return `<input class="input-sm inline-block w-32 ${ringCls}" value="${esc(val||'')}" ${dis} ${oninput} placeholder="${esc(placeholder)}">`
-  }
+  const header = `
+    <div class="mb-3.5">
+      <h3 class="text-[15px] font-bold text-ink mb-1">${esc(sec.title)}</h3>
+      <p class="text-[13.5px] text-[#1d3557] leading-[1.55]">${esc(sec.instruction)}</p>
+    </div>`
 
   let body = ''
+
   if (sec.type === 'gap-fill'){
     const rows = sec.items.map(item => {
       const before = selectableInline(item.before||'', region, `q-${item.num}-before`, {withHighlights:hl})
       const after  = selectableInline(item.after||'',  region, `q-${item.num}-after`,  {withHighlights:hl})
-      const correctNote = showCorrect && marks[item.num] === 'wrong'
-        ? `<div class="text-[12px] text-moss mt-1 ml-7">Đáp án đúng: <strong>${esc(correctOverride[item.num] || (Array.isArray(item.answer) ? item.answer.join(' / ') : item.answer))}</strong></div>` : ''
-      return `<div class="text-[14px] leading-[2.1] q-anchor" id="q-${item.num}">
-        <span class="text-stone mr-1.5 font-semibold">${item.num}.</span>${before}
-        ${inputBox(item.num, answers[item.num], String(item.num))}
+      const m = marks[item.num]
+      const inputCls = m === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                     : m === 'wrong' ? 'border-rose-500 bg-rose-50 text-rose-800' : 'border-exambr/60 bg-examhi/30'
+      const dis = submitted ? 'disabled' : ''
+      const oninput = submitted ? '' : `oninput="setAns('${role}',${item.num},this.value)"`
+      const correctNote = showCorrect && m === 'wrong'
+        ? `<div class="text-[12px] text-moss mt-1 ml-7">→ <strong>${esc(correctOverride[item.num] || (Array.isArray(item.answer)?item.answer.join(' / '):item.answer))}</strong></div>` : ''
+      return `<div class="text-[14px] leading-[2] q-anchor mb-1" id="q-${item.num}">
+        <span class="q-num-pill">${item.num}</span>${before}
+        <input class="input-sm inline-block w-32 ${inputCls}" value="${esc(answers[item.num]||'')}" ${dis} ${oninput}>
         ${after}
-        ${correctNote}
-        ${explainBlock(item, opts)}
+        ${correctNote}${explainBlock(item, opts)}
       </div>`
     }).join('')
-    body = `<div class="bg-bone border border-mist rounded-lg p-4">
-      ${sec.noteTitle ? `<p class="text-[13px] font-semibold text-ink mb-3">${esc(sec.noteTitle)}</p>` : ''}
-      ${rows}
-    </div>`
+    body = `${sec.noteTitle ? `<p class="text-[13.5px] font-semibold text-ink mb-2">${esc(sec.noteTitle)}</p>` : ''}${rows}`
   }
+
   if (sec.type === 'tfng'){
     body = sec.items.map(item => {
       const m = marks[item.num]
       const stmt = selectableInline(item.statement, region, `q-${item.num}-stmt`, {withHighlights:hl})
       const correctNote = showCorrect && m === 'wrong'
-        ? `<div class="text-[12px] text-moss mt-2">Đáp án đúng: <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''
-      return `<div class="mb-4 pb-4 border-b border-mist last:border-0 last:mb-0 last:pb-0 q-anchor" id="q-${item.num}">
-        <p class="text-[14px] leading-[1.65] text-ink mb-2"><span class="text-stone font-semibold mr-1.5">${item.num}.</span>${stmt}</p>
-        <div class="flex gap-1.5 flex-wrap">
+        ? `<div class="text-[12px] text-moss mt-2 pl-3">→ <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''
+      return `<div class="q-block q-anchor" id="q-${item.num}">
+        <p class="text-[14px] leading-[1.6] text-ink mb-2"><span class="q-num-pill">${item.num}</span>${stmt}</p>
+        <div class="space-y-0.5">
           ${TFNG.map(opt => {
             const sel = answers[item.num] === opt
+            const cls = sel ? (showCorrect ? (m === 'correct' ? 'sel-correct' : 'sel-wrong') : 'sel') : ''
             const onclick = submitted ? '' : `onclick="setAns('${role}',${item.num},'${opt}')"`
-            const stateCls = sel ? (m === 'correct' ? 'bg-emerald-600 text-white' : m === 'wrong' ? 'bg-rose-600 text-white' : 'bg-forest text-white')
-                                 : 'bg-mist text-stone hover:bg-chalk'
-            return `<button ${onclick} ${submitted?'disabled':''} class="px-3.5 py-1 rounded-full text-[12px] font-medium transition ${stateCls}">${opt}</button>`
+            return `<div class="ans-row ${cls}" ${onclick}>
+              <span class="text-[13px] font-medium text-ink">${opt}</span>
+            </div>`
           }).join('')}
         </div>
-        ${correctNote}
-        ${explainBlock(item, opts)}
+        ${correctNote}${explainBlock(item, opts)}
       </div>`
     }).join('')
   }
+
   if (sec.type === 'mcq'){
     body = sec.items.map(item => {
       const m = marks[item.num]
       const qText = selectableInline(item.question, region, `q-${item.num}-q`, {withHighlights:hl})
       const correctNote = showCorrect && m === 'wrong'
-        ? `<div class="text-[12px] text-moss mt-2">Đáp án đúng: <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''
-      return `<div class="mb-5 pb-5 border-b border-mist last:border-0 last:mb-0 last:pb-0 q-anchor" id="q-${item.num}">
-        <p class="text-[14px] font-medium text-ink mb-2.5"><span class="text-stone font-semibold mr-1.5">${item.num}.</span>${qText}</p>
+        ? `<div class="text-[12px] text-moss mt-2 pl-3">→ <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''
+      return `<div class="q-block q-anchor" id="q-${item.num}">
+        <p class="text-[14px] font-medium text-ink mb-2 leading-[1.55]"><span class="q-num-pill">${item.num}</span>${qText}</p>
+        <div class="space-y-0.5">
         ${item.options.map(opt => {
           const sel = answers[item.num] === opt.l
+          const cls = sel ? (showCorrect ? (m === 'correct' ? 'sel-correct' : 'sel-wrong') : 'sel') : ''
           const onclick = submitted ? '' : `onclick="setAns('${role}',${item.num},'${opt.l}')"`
-          const stateCls = sel
-            ? (m === 'correct' ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-200'
-              : m === 'wrong' ? 'bg-rose-50 border-rose-500 ring-2 ring-rose-200'
-              : 'bg-forest/5 border-forest ring-2 ring-forest/15')
-            : 'bg-white border-chalk hover:border-stone/50'
           const optTxt = selectableInline(opt.t, region, `q-${item.num}-opt-${opt.l}`, {withHighlights:hl})
-          return `<div ${onclick} class="flex items-start gap-2.5 p-2.5 rounded-lg border ${stateCls} mb-1.5 cursor-${submitted?'default':'pointer'} transition">
-            <span class="font-semibold text-[13px] min-w-[18px] text-stone">${opt.l}</span>
+          return `<div class="ans-row ${cls}" ${onclick}>
+            <input type="radio" class="mt-1 accent-exambr pointer-events-none" ${sel?'checked':''}>
             <span class="text-[14px] text-ink leading-[1.55]">${optTxt}</span>
           </div>`
         }).join('')}
-        ${correctNote}
-        ${explainBlock(item, opts)}
+        </div>
+        ${correctNote}${explainBlock(item, opts)}
       </div>`
     }).join('')
   }
+
   if (sec.type === 'mcq-multi'){
-    /* Chọn pickN letters, lưu lần lượt vào sec.nums[0..pickN-1] */
     const picked = sec.nums.map(n => answers[n]).filter(Boolean)
     const allMarks = sec.nums.map(n => marks[n])
     const isCorrect = allMarks.every(x => x === 'correct') && allMarks.length === sec.pickN
-    const wrong     = showCorrect && allMarks.some(x => x === 'wrong')
-    const qText = selectableInline(sec.instruction, region, `q-${sec.nums.join('_')}-q`, {withHighlights:hl})
-    const onPick = (l) => {
-      if (submitted) return ''
-      return `onclick="pickMulti('${role}','${sec.nums.join(',')}',${sec.pickN},'${l}')"`
-    }
+    const wrong = showCorrect && allMarks.some(x => x === 'wrong')
+    const onPick = (l) => submitted ? '' : `onclick="pickMulti('${role}','${sec.nums.join(',')}',${sec.pickN},'${l}')"`
     const correctNote = wrong
-      ? `<div class="text-[12px] text-moss mt-2">Đáp án đúng: <strong>${esc((correctOverride[sec.nums.join(',')] || sec.answers.join(', ')))}</strong></div>` : ''
+      ? `<div class="text-[12px] text-moss mt-2 pl-3">→ <strong>${esc(correctOverride[sec.nums.join(',')] || sec.answers.join(', '))}</strong></div>` : ''
     body = `<div class="q-anchor" id="q-${sec.nums[0]}">
-      <p class="text-[14px] font-medium text-ink mb-2.5"><span class="text-stone font-semibold mr-1.5">${sec.nums.join('–')}.</span>${qText}</p>
+      <p class="text-[14px] font-medium text-ink mb-1 leading-[1.55]">
+        <span class="q-num-pill" style="width:auto;padding:0 8px">${sec.nums.join('–')}</span>
+        ${esc(sec.instruction)}
+      </p>
       <p class="text-[12px] text-stone mb-2">Đã chọn ${picked.length}/${sec.pickN}</p>
+      <div class="space-y-0.5">
       ${sec.options.map(opt => {
         const sel = picked.includes(opt.l)
-        const stateCls = sel
-          ? (isCorrect ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-200'
-            : wrong ? 'bg-rose-50 border-rose-500 ring-2 ring-rose-200'
-            : 'bg-forest/5 border-forest ring-2 ring-forest/15')
-          : 'bg-white border-chalk hover:border-stone/50'
+        const cls = sel ? (showCorrect ? (isCorrect?'sel-correct':wrong?'sel-wrong':'sel') : 'sel') : ''
         const optTxt = selectableInline(opt.t, region, `q-${sec.nums.join('_')}-opt-${opt.l}`, {withHighlights:hl})
-        return `<div ${onPick(opt.l)} class="flex items-start gap-2.5 p-2.5 rounded-lg border ${stateCls} mb-1.5 cursor-${submitted?'default':'pointer'} transition">
-          <span class="font-semibold text-[13px] min-w-[18px] text-stone">${opt.l}</span>
+        return `<div class="ans-row ${cls}" ${onPick(opt.l)}>
+          <input type="checkbox" class="mt-1 accent-exambr pointer-events-none" ${sel?'checked':''}>
           <span class="text-[14px] text-ink leading-[1.55]">${optTxt}</span>
         </div>`
       }).join('')}
-      ${correctNote}
-      ${explainBlock({num: sec.nums.join(','), explain: sec.explain}, opts)}
+      </div>
+      ${correctNote}${explainBlock({num: sec.nums.join(','), explain: sec.explain}, opts)}
     </div>`
   }
 
-  return `<div class="card p-5 mb-3.5">
-    <p class="lbl mb-1">${esc(sec.title)}</p>
-    <p class="text-[12.5px] text-stone italic leading-[1.55] mb-4">${esc(sec.instruction)}</p>
-    ${body}
-  </div>`
-}
-
-function explainBlock(item, opts){
-  if (!opts.showExplain || !item.explain) return ''
-  const expanded = S.expandExplain[item.num]
-  return `<div class="mt-2">
-    <button class="btn-ghost text-[12px]" onclick="toggleExplain('${item.num}')">${expanded ? '▾' : '▸'} Giải thích</button>
-    ${expanded ? `<div class="mt-1 ml-2 pl-3 border-l-2 border-gold/60 text-[12.5px] text-ink leading-[1.6] bg-amber-50/40 py-2 rounded-r">${esc(item.explain)}</div>` : ''}
-  </div>`
+  return `<div class="mb-7">${header}${body}</div>`
 }
 
 function renderFormItems(items, answers, submitted, role, opts = {}){
@@ -820,14 +799,14 @@ function renderFormItems(items, answers, submitted, role, opts = {}){
       const pl = it.deep ? 'pl-9' : it.indent ? 'pl-5' : ''
       const m = marks[it.num]
       const ringCls = m === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
-                      : m === 'wrong' ? 'border-rose-500 bg-rose-50 text-rose-800' : ''
+                     : m === 'wrong' ? 'border-rose-500 bg-rose-50 text-rose-800' : 'border-exambr/60 bg-examhi/30'
       const dis = submitted ? 'disabled' : ''
       const oninput = submitted ? '' : `oninput="setAns('${role}',${it.num},this.value)"`
       const correctNote = showCorrect && m === 'wrong'
-        ? `<div class="text-[12px] text-moss ml-2">→ <strong>${esc(correctOverride[it.num] || (Array.isArray(it.answer) ? it.answer.join(' / ') : it.answer))}</strong></div>` : ''
+        ? `<div class="text-[12px] text-moss ml-2">→ <strong>${esc(correctOverride[it.num] || (Array.isArray(it.answer)?it.answer.join(' / '):it.answer))}</strong></div>` : ''
       return `<div class="flex items-center gap-2 text-[14px] leading-[2.2] flex-wrap ${pl} q-anchor" id="q-${it.num}">
         ${it.prefix ? `<span class="text-ink">${esc(it.prefix)}</span>` : ''}
-        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-forest text-white text-[11px] font-semibold">${it.num}</span>
+        <span class="q-num-pill">${it.num}</span>
         <input class="input-sm w-36 ${ringCls}" value="${esc(answers[it.num]||'')}" ${dis} ${oninput}>
         ${it.suffix ? `<span class="text-ink">${esc(it.suffix)}</span>` : ''}
         ${correctNote}
@@ -870,52 +849,46 @@ function viewLogin(){
 }
 
 /* =====================================================================
-   VIEWS — Student Home
+   VIEWS — Courses Home (sau login, hiện danh sách khoá học)
    ===================================================================== */
-function viewStudentHome(){
-  const u = S.user, subs = S.subs
-  const reading = WEEKS.filter(w => w.course === 'Reading')
-  const listening = WEEKS.filter(w => w.course === 'Listening')
-
-  const totalLive = WEEKS.filter(w => w.live).length
-  const completed = WEEKS.filter(w => w.live && subs[w.id+'-inClass'] && subs[w.id+'-homework']).length
-
-  const card = (w) => {
-    const ic = subs[w.id+'-inClass'], hw = subs[w.id+'-homework']
-    let badge, accent = ''
-    if (!w.live){ badge = `<span class="text-[10.5px] bg-mist text-stone px-2 py-0.5 rounded-full font-medium">Sắp có</span>` }
-    else if (ic && hw){
-      const totalScore = (ic.score||0) + (hw.score||0), totalMax = (ic.total||0) + (hw.total||0)
-      badge = `<span class="text-[10.5px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">✓ ${totalScore}/${totalMax}</span>`
-      accent = 'border-emerald-200/70'
-    }
-    else if (ic){ badge = `<span class="text-[10.5px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-semibold">Còn BTVN</span>`; accent='border-amber-200' }
-    else { badge = `<span class="text-[10.5px] bg-forest text-white px-2 py-0.5 rounded-full font-semibold">Vào học</span>` }
-
-    return `<div onclick="${w.live?`doPickWeek('${w.id}')`:''}" class="card p-4 ${accent} ${w.live?'cursor-pointer hover:shadow-float hover:-translate-y-px transition':'opacity-60'}">
-      <div class="flex justify-between items-start gap-3">
-        <div class="flex-1 min-w-0">
-          <p class="text-[10.5px] font-bold text-gold uppercase tracking-wider mb-1">${esc(w.wk)}</p>
-          <p class="text-[14.5px] font-semibold text-ink leading-snug mb-1">${esc(w.title)}</p>
-          ${w.subtitle ? `<p class="text-[12px] text-stone">${esc(w.subtitle)}</p>` : ''}
+function viewCourses(){
+  const u = S.user, subs = S.subs, prog = S.prog
+  const card = (c) => {
+    const weeks = courseWeeks(c)
+    const live = weeks.filter(w => w.live).length
+    const done = weeks.filter(w => w.live && subs[w.id+'-inClass'] && subs[w.id+'-homework']).length
+    const totalScore = weeks.reduce((a,w)=> a + (subs[w.id+'-inClass']?.score||0) + (subs[w.id+'-homework']?.score||0), 0)
+    const totalMax   = weeks.reduce((a,w)=> a + (subs[w.id+'-inClass']?.total||0) + (subs[w.id+'-homework']?.total||0), 0)
+    const pct = live ? Math.round(done/live*100) : 0
+    return `<div class="card overflow-hidden hover:shadow-float hover:-translate-y-0.5 transition cursor-pointer" onclick="doPickCourse('${c.id}')">
+      <div class="bg-gradient-to-br ${c.bgClass} p-6 text-white">
+        <div class="flex items-start justify-between mb-4">
+          <div class="text-3xl">${c.icon}</div>
+          <span class="text-[10.5px] bg-white/15 px-2.5 py-1 rounded-full font-medium tracking-wider uppercase">${c.duration}</span>
         </div>
-        ${badge}
+        <h3 class="font-display text-[22px] font-medium leading-tight mb-1">${esc(c.title)}</h3>
+        <p class="text-[13px] text-white/75">${esc(c.tagline)}</p>
+      </div>
+      <div class="p-5">
+        <p class="text-[13px] text-stone leading-[1.6] mb-4 line-clamp-3">${esc(c.desc)}</p>
+        <div class="flex items-center justify-between mb-3">
+          <span class="lbl-mute">${live} bài học mở</span>
+          <span class="text-[12px] text-ink font-semibold">${done}/${live} hoàn thành</span>
+        </div>
+        <div class="h-2 bg-mist rounded-full overflow-hidden mb-4">
+          <div class="h-full bg-${c.accent}-600 rounded-full transition-all" style="width:${pct}%"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          ${totalMax > 0 ? `<span class="text-[12.5px] text-stone">Điểm: <strong class="text-ink">${totalScore}/${totalMax}</strong></span>` : '<span class="text-[12.5px] text-stone">Chưa có điểm</span>'}
+          <span class="btn-dark text-[12px] py-1.5 px-3">Vào học →</span>
+        </div>
       </div>
     </div>`
   }
-  const group = (label, icon, list) => `
-    <div class="mb-8">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="text-[15px]">${icon}</span>
-        <p class="lbl-mute">${label} · ${list.filter(w=>w.live).length}/${list.length} mở</p>
-      </div>
-      <div class="grid gap-2.5" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${list.map(card).join('')}</div>
-    </div>`
-
   return `
   <div class="min-h-screen">
     <header class="bg-white border-b border-chalk px-6 py-4 sticky top-0 z-10 backdrop-blur bg-white/90">
-      <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-lg bg-forest text-white flex items-center justify-center text-base">📚</div>
           <div>
@@ -926,31 +899,88 @@ function viewStudentHome(){
         <button class="btn" onclick="doLogout()">Đăng xuất</button>
       </div>
     </header>
-    <main class="max-w-5xl mx-auto px-6 py-8">
-      <div class="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div class="card p-4">
-          <p class="lbl-mute mb-1">Tiến độ</p>
-          <p class="text-[22px] font-display font-medium text-ink">${completed}<span class="text-stone text-[15px]"> / ${totalLive}</span></p>
-          <p class="text-[12px] text-stone">tuần đã hoàn thành cả 2 bài</p>
-        </div>
-        <div class="card p-4">
-          <p class="lbl-mute mb-1">Đang mở</p>
-          <p class="text-[22px] font-display font-medium text-ink">${totalLive}<span class="text-stone text-[15px]"> tuần</span></p>
-          <p class="text-[12px] text-stone">sẵn sàng học</p>
-        </div>
-        <div class="card p-4 bg-forest text-white border-forest">
-          <p class="text-[10.5px] font-semibold tracking-[0.08em] uppercase text-gold mb-1">💡 Mẹo</p>
-          <p class="text-[13px] leading-[1.5]">Hoàn thành lý thuyết trước khi làm bài tập trên lớp để hiệu quả tối đa.</p>
-        </div>
+    <main class="max-w-6xl mx-auto px-6 py-10">
+      <div class="mb-8">
+        <h1 class="font-display text-[32px] font-medium text-ink mb-1">Xin chào, ${esc(u.name)} 👋</h1>
+        <p class="text-[14px] text-stone">Chọn khoá học để bắt đầu — bạn đã đăng ký <strong class="text-ink">${COURSES.length}</strong> khoá.</p>
       </div>
-      ${group('Reading', '📖', reading)}
-      ${group('Listening', '🎧', listening)}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">${COURSES.map(card).join('')}</div>
     </main>
   </div>`
 }
 
 /* =====================================================================
-   VIEWS — Week Detail (with tabs)
+   VIEWS — Course Outline (danh sách bài học của 1 khoá)
+   ===================================================================== */
+function viewCourseOutline(){
+  const c = getCourse(S.selCourse); if (!c) return ''
+  const subs = S.subs, prog = S.prog
+  const weeks = courseWeeks(c)
+  const live = weeks.filter(w => w.live).length
+  const done = weeks.filter(w => w.live && subs[w.id+'-inClass'] && subs[w.id+'-homework']).length
+  const pct = live ? Math.round(done/live*100) : 0
+
+  const row = (w, idx) => {
+    const ic = subs[w.id+'-inClass'], hw = subs[w.id+'-homework']
+    const t = prog[w.id]
+    let status, statusCls
+    if (!w.live){ status='🔒 Sắp có'; statusCls='text-stone' }
+    else if (ic && hw){ status='✓ Hoàn thành'; statusCls='text-emerald-700' }
+    else if (ic){ status='Còn BTVN'; statusCls='text-amber-700' }
+    else if (t){ status='Chưa làm bài'; statusCls='text-amber-700' }
+    else { status='Chưa bắt đầu'; statusCls='text-stone' }
+    const scoreCell = (s) => s ? `<span class="text-[12px] font-semibold">${s.score}/${s.total}</span>` : `<span class="text-[12px] text-stone">—</span>`
+    return `<div onclick="${w.live?`doPickWeek('${w.id}')`:''}" class="card p-4 ${w.live?'cursor-pointer hover:shadow-float hover:border-forest/30 transition':'opacity-60'}">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-lg ${w.live?'bg-forest text-white':'bg-mist text-stone'} flex items-center justify-center font-display text-[16px] font-medium flex-shrink-0">${idx+1}</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[10.5px] font-bold text-${c.accent}-700 uppercase tracking-wider mb-0.5">${esc(w.wk)}</p>
+          <p class="text-[14.5px] font-semibold text-ink leading-tight mb-0.5">${esc(w.title)}</p>
+          ${w.subtitle ? `<p class="text-[12px] text-stone">${esc(w.subtitle)}</p>` : ''}
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-center">
+          <div><p class="lbl-mute mb-0.5">Lý thuyết</p>${t?'<span class="chip-correct">✓</span>':'<span class="chip-empty">—</span>'}</div>
+          <div><p class="lbl-mute mb-0.5">Trên lớp</p>${scoreCell(ic)}</div>
+          <div><p class="lbl-mute mb-0.5">BTVN</p>${scoreCell(hw)}</div>
+        </div>
+        <div class="text-right min-w-[100px]">
+          <p class="text-[12px] font-medium ${statusCls}">${status}</p>
+          ${w.live?'<span class="text-[11px] text-stone">→ Vào bài</span>':''}
+        </div>
+      </div>
+    </div>`
+  }
+
+  return `<div class="min-h-screen">
+    <header class="bg-white border-b border-chalk px-5 py-3 sticky top-0 z-30 flex items-center gap-3">
+      <button class="btn" onclick="backToCourses()">← Khoá học</button>
+      <div class="flex-1"></div>
+      <span class="text-[13px] text-ink font-medium hidden md:block">${esc(S.user.name)}</span>
+    </header>
+    <section class="bg-gradient-to-br ${c.bgClass} text-white px-7 py-10">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">${c.icon}</span>
+          <span class="text-[11px] bg-white/15 px-2.5 py-1 rounded-full font-medium tracking-wider uppercase">${c.level}</span>
+        </div>
+        <h1 class="font-display text-[32px] font-medium leading-tight mb-2">${esc(c.title)}</h1>
+        <p class="text-[14.5px] text-white/80 max-w-2xl mb-5">${esc(c.desc)}</p>
+        <div class="flex items-center gap-6 text-[13px]">
+          <div><p class="text-white/60 text-[11px] uppercase tracking-wider">Tiến độ</p><p class="font-display text-[20px]">${done}<span class="opacity-60">/${live}</span></p></div>
+          <div class="flex-1 max-w-md"><div class="h-2 bg-white/15 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full" style="width:${pct}%"></div></div></div>
+          <div class="text-right"><p class="text-white/60 text-[11px] uppercase tracking-wider">% hoàn thành</p><p class="font-display text-[20px]">${pct}%</p></div>
+        </div>
+      </div>
+    </section>
+    <main class="max-w-5xl mx-auto px-5 py-7">
+      <p class="lbl-mute mb-3">📚 Outline khoá học · ${weeks.length} bài</p>
+      <div class="grid gap-2.5">${weeks.map(row).join('')}</div>
+    </main>
+  </div>`
+}
+
+/* =====================================================================
+   VIEWS — Week Detail (with centered prominent tabs)
    ===================================================================== */
 function viewWeekDetail(){
   const week = getWeek(S.selWid); if (!week) return ''
@@ -959,6 +989,9 @@ function viewWeekDetail(){
   if (tab === 'theory')   content = tabTheory(week)
   else if (tab === 'inClass') content = tabExercise(week, 'inClass')
   else                    content = tabExercise(week, 'homework')
+
+  const ic = S.subs[S.selWid+'-inClass'], hw = S.subs[S.selWid+'-homework']
+  const tDone = S.prog[S.selWid]
 
   const confirmModal = S.confirmType ? `
     <div class="modal-bg fade-in">
@@ -973,22 +1006,37 @@ function viewWeekDetail(){
       </div>
     </div>` : ''
 
+  const tabBtn = (id, icon, label, badge) => {
+    const active = tab === id
+    return `<div class="seg ${active?'act':''}" onclick="setTab('${id}')">
+      ${active ? '<span class="seg-dot"></span>' : ''}
+      <span>${icon}</span>
+      <span class="hidden sm:inline">${label}</span>
+      ${badge||''}
+    </div>`
+  }
+  const dot = (cond, color) => cond ? `<span class="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-${color}-500"></span>` : ''
+
   return `<div class="min-h-screen">
     <header class="bg-white border-b border-chalk px-5 py-3 sticky top-0 z-30 flex items-center gap-3">
-      <button class="btn" onclick="set({view:'s-home',selWid:null,activeTab:'theory'})">← Quay lại</button>
+      <button class="btn" onclick="backToCourse()">← Khoá học</button>
       <span class="text-[13px] text-stone font-medium">${esc(week.course)} · ${esc(week.wk)}</span>
       <div class="flex-1"></div>
       <span class="text-[13px] text-ink font-medium hidden md:block">${esc(S.user.name)}</span>
     </header>
     <section class="bg-forest text-white px-7 py-7">
-      <span class="inline-block bg-gold/15 text-gold px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase mb-2.5">${esc(week.wk)}</span>
-      <h1 class="font-display text-[26px] font-medium leading-tight">${esc(week.title)}</h1>
-      ${week.subtitle ? `<p class="text-[14px] text-white/65 mt-1">${esc(week.subtitle)}</p>` : ''}
+      <div class="max-w-5xl mx-auto">
+        <span class="inline-block bg-gold/15 text-gold px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase mb-2.5">${esc(week.wk)}</span>
+        <h1 class="font-display text-[26px] font-medium leading-tight">${esc(week.title)}</h1>
+        ${week.subtitle ? `<p class="text-[14px] text-white/65 mt-1">${esc(week.subtitle)}</p>` : ''}
+      </div>
     </section>
-    <nav class="bg-white border-b border-chalk px-5 sticky top-[57px] z-20 flex">
-      <div onclick="setTab('theory')" class="tab ${tab==='theory'?'act':''}">📖 Lý thuyết</div>
-      <div onclick="setTab('inClass')" class="tab ${tab==='inClass'?'act':''}">✏️ Bài tập trên lớp</div>
-      <div onclick="setTab('homework')" class="tab ${tab==='homework'?'act':''}">🏠 Bài tập về nhà</div>
+    <nav class="bg-white border-b border-chalk px-5 py-3 sticky top-[57px] z-20 flex justify-center">
+      <div class="seg-wrap">
+        ${tabBtn('theory',  '📖', 'Lý thuyết',          dot(tDone,'emerald'))}
+        ${tabBtn('inClass', '✏️', 'Bài tập trên lớp',   dot(!!ic,'emerald'))}
+        ${tabBtn('homework','🏠', 'Bài tập về nhà',     dot(!!hw,'emerald'))}
+      </div>
     </nav>
     <div>${content}</div>
     ${confirmModal}
@@ -1024,7 +1072,7 @@ function tabTheory(week){
 }
 
 /* =====================================================================
-   VIEWS — Exercise (split-screen FULL-WIDTH for Reading)
+   VIEWS — Exercise (IELTS Mock-test style: header + footer chrome)
    ===================================================================== */
 function tabExercise(week, type){
   const ex = getEx(week, type)
@@ -1033,54 +1081,95 @@ function tabExercise(week, type){
   const submitted = type === 'inClass' ? S.submittedIC : S.submittedHW
   const total = countQs(ex)
   const filled = Object.values(answers).filter(v => v && String(v).trim()).length
-  const progressPct = total ? Math.round(filled/total*100) : 0
   const role = type === 'inClass' ? 'IC' : 'HW'
 
-  const bar = `
-    <div class="bg-white border-b border-chalk px-5 py-2.5 sticky top-[57px] z-10 flex items-center gap-3 backdrop-blur bg-white/95">
-      <span class="text-[12.5px] text-stone font-medium">${type==='inClass'?'✏️ Bài tập trên lớp':'🏠 Bài tập về nhà'}</span>
-      <div class="flex items-center gap-2 flex-1 max-w-xs">
-        <div class="flex-1 h-1.5 bg-mist rounded-full overflow-hidden"><div class="h-full bg-forest rounded-full transition-all" style="width:${progressPct}%"></div></div>
-        <span class="text-[11.5px] text-stone font-medium tabular-nums">${filled}/${total}</span>
-      </div>
-      <div class="flex-1"></div>
-      ${submitted
-        ? `<button class="btn-green" onclick="viewMyResult('${type}')">📊 Xem kết quả</button>`
-        : `<button class="btn-dark" onclick="trySubmit('${type}')">Nộp bài</button>`}
-    </div>`
+  /* Build footer: simulate 1 part for now (we have one exercise per type).
+     In real IELTS có Part 1/2/3 — sau này nếu thêm sections sẽ tách. */
+  const partBadge = ex.partLabel || 'Part 1'
+  const partNums = [1,2,3].map(i => {
+    const isAct = i === 1
+    return `<span class="exam-pill ${isAct?'act':''}">${i}</span>`
+  }).join('')
 
+  /* Question number pills in footer (1..N) */
+  const numPills = (() => {
+    const items = listAllItems(ex)
+    const flat = []
+    items.forEach(it => {
+      if (it.kind === 'mcq-multi') it.nums.forEach(n => flat.push({n, ans: answers[n]}))
+      else flat.push({n: it.num, ans: answers[it.num]})
+    })
+    return flat.map(({n, ans}) =>
+      `<span class="exam-pill ${ans?'done':''}" onclick="document.getElementById('q-${n}')?.scrollIntoView({behavior:'smooth',block:'start'})">${n}</span>`
+    ).join(' ')
+  })()
+
+  let main = ''
   if (ex.passageTitle){
-    /* SPLIT SCREEN — Full width, edge-to-edge */
-    return bar + `
-    <div class="grid gap-0 fade-in" style="grid-template-columns:1fr 1fr;height:calc(100vh - 178px)">
-      <aside class="bg-white border-r border-chalk pane-scroll p-7">
-        <p class="lbl mb-3">📖 Reading Passage</p>
-        <h2 class="font-display text-[20px] font-medium text-ink mb-4">${esc(ex.passageTitle)}</h2>
-        <div class="font-serif">${passageHTML(type==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK)}</div>
+    /* Reading: 2-pane split, IELTS style */
+    main = `<div class="flex" style="height:calc(100vh - 57px - 64px - 44px - 50px)">
+      <aside class="bg-white pane-scroll p-7 flex-1 border-r border-[#d6d9de]">
+        <div class="font-serif">
+          ${passageHTML(type==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK, {withHighlights:true})}
+        </div>
       </aside>
-      <section class="bg-cream pane-scroll p-7">
-        ${ex.sections.map(sec => renderSection(sec, answers, submitted, role)).join('')}
+      <div class="pane-divider"><div class="grip"></div></div>
+      <section class="bg-white pane-scroll p-7 flex-1">
+        ${ex.sections.map(sec => renderSection(sec, answers, submitted, role, {withHighlights:true})).join('')}
       </section>
     </div>
-    <style>@media(max-width:900px){body .grid[style*="1fr 1fr"]{grid-template-columns:1fr!important;height:auto!important}body .grid[style*="1fr 1fr"]>aside,body .grid[style*="1fr 1fr"]>section{max-height:none}}</style>`
-  }
-
-  /* Listening: form-filling layout, single column */
-  return bar + `
-    <div class="max-w-3xl mx-auto px-5 py-5 fade-in">
-      <div class="card p-4 mb-4 bg-forest text-white border-forest flex items-center gap-3">
-        <span class="text-2xl">🎧</span>
-        <div class="flex-1">
-          <p class="text-[10.5px] text-gold font-semibold tracking-wider uppercase mb-1">Audio bài tập</p>
-          <audio controls preload="metadata" class="w-full"><source src="${esc(ex.audioUrl)}" type="audio/mpeg"></audio>
+    <style>@media(max-width:900px){.flex[style*="calc(100vh"]{flex-direction:column;height:auto!important}.pane-divider{display:none}}</style>`
+  } else {
+    /* Listening: form-fill, sticky audio */
+    main = `<div class="bg-white pane-scroll p-7" style="min-height:calc(100vh - 57px - 64px - 44px - 50px)">
+      <div class="max-w-3xl mx-auto">
+        <div class="card p-4 mb-5 bg-forest text-white border-forest flex items-center gap-3 sticky top-0">
+          <span class="text-2xl">🎧</span>
+          <div class="flex-1">
+            <p class="text-[10.5px] text-gold font-semibold tracking-wider uppercase mb-1">Audio bài tập</p>
+            <audio controls preload="metadata" class="w-full"><source src="${esc(ex.audioUrl)}" type="audio/mpeg"></audio>
+          </div>
         </div>
-      </div>
-      <div class="card p-5">
-        <p class="lbl mb-3">📋 ${esc(ex.formTitle)}</p>
-        <p class="text-[12.5px] text-stone italic leading-[1.55] mb-4">Complete the form below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+        <div class="mb-3">
+          <h3 class="text-[15px] font-bold text-ink mb-1">📋 ${esc(ex.formTitle)}</h3>
+          <p class="text-[13.5px] text-[#1d3557] leading-[1.55]">Complete the form below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+        </div>
         ${renderFormItems(ex.formItems, answers, submitted, role)}
       </div>
     </div>`
+  }
+
+  return `<div class="exam-shell">
+    <div class="exam-header">
+      <span class="ielts-logo">IELTS</span>
+      <span class="opacity-90">${esc(week.course)} · ${esc(S.user.name)}</span>
+      <div class="flex-1"></div>
+      <span class="text-[12px] opacity-80">⏱ Tự do · 🔆 ${type==='inClass'?'Bài tập trên lớp':'Bài tập về nhà'}</span>
+      <div class="flex items-center gap-1.5 ml-3">
+        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div><span class="text-[12px]">Online</span>
+      </div>
+    </div>
+    <div class="exam-strip flex items-center gap-3 flex-wrap">
+      <span class="text-[13.5px] font-bold text-ink">${esc(partBadge)}</span>
+      <span class="text-[13px] text-stone">${esc(ex.partInstruction || 'Read the text and answer the questions.')}</span>
+      <div class="flex-1"></div>
+      <div class="text-[12px] text-stone">💡 Kéo chọn text bất kỳ để highlight (5 màu)</div>
+    </div>
+    ${main}
+    <div class="exam-foot">
+      <span class="text-[12px] opacity-90 mr-2">${esc(partBadge)}</span>
+      ${partNums}
+      <div class="w-px h-5 bg-white/20 mx-2"></div>
+      <div class="flex items-center gap-1.5 flex-wrap">${numPills}</div>
+      <div class="flex-1"></div>
+      <span class="text-[12px] opacity-90 mr-2">${filled}/${total}</span>
+      <span class="exam-arrow" title="Trước">←</span>
+      <span class="exam-arrow" title="Sau">→</span>
+      ${submitted
+        ? `<span class="exam-check" title="Xem kết quả" onclick="viewMyResult('${type}')">📊</span>`
+        : `<span class="exam-check" title="Nộp bài" onclick="trySubmit('${type}')">✓</span>`}
+    </div>
+  </div>`
 }
 
 /* =====================================================================
@@ -1097,21 +1186,21 @@ function viewResult(){
   const score = sub.score || 0, total = sub.total || countQs(ex)
   const pct = total ? Math.round(score/total*100) : 0
   const correctOverride = S.rev?.correct_answers || {}
-
   const bandColor = pct >= 80 ? 'emerald' : pct >= 50 ? 'amber' : 'rose'
 
   const breakdown = ex.passageTitle
-    ? `<div class="grid gap-0 mt-5" style="grid-template-columns:1fr 1fr;min-height:calc(100vh - 320px)">
-        <aside class="bg-white border border-chalk rounded-l-xl pane-scroll p-7">
+    ? `<div class="flex" style="min-height:calc(100vh - 360px)">
+        <aside class="bg-white border border-chalk rounded-l-xl pane-scroll p-7 flex-1">
           <p class="lbl mb-3">📖 Bài đọc</p>
           <h3 class="font-display text-[18px] font-medium mb-4">${esc(ex.passageTitle)}</h3>
-          <div class="font-serif">${passageHTML(type==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK)}</div>
+          <div class="font-serif">${passageHTML(type==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK, {withHighlights:true})}</div>
         </aside>
-        <section class="bg-bone border-y border-r border-chalk rounded-r-xl pane-scroll p-7">
-          ${ex.sections.map(sec => renderSection(sec, answers, true, type==='inClass'?'IC':'HW', { showCorrect:true, marks, correctOverride, showExplain:true })).join('')}
+        <div class="pane-divider rounded-none border-y border-chalk"><div class="grip"></div></div>
+        <section class="bg-white border-y border-r border-chalk rounded-r-xl pane-scroll p-7 flex-1">
+          ${ex.sections.map(sec => renderSection(sec, answers, true, type==='inClass'?'IC':'HW', { showCorrect:true, marks, correctOverride, showExplain:true, withHighlights:true })).join('')}
         </section>
       </div>
-      <style>@media(max-width:900px){.grid[style*="1fr 1fr"]{grid-template-columns:1fr!important}}</style>`
+      <style>@media(max-width:900px){.flex[style*="min-height"]{flex-direction:column}.pane-divider{display:none}}</style>`
     : `<div class="card p-5 mt-5">
         ${renderFormItems(ex.formItems, answers, true, type==='inClass'?'IC':'HW', { showCorrect:true, marks, correctOverride })}
       </div>`
@@ -1154,19 +1243,13 @@ function viewResult(){
 }
 
 /* =====================================================================
-   VIEWS — Teacher Home (student list)
+   VIEWS — Teacher Home
    ===================================================================== */
 function viewTeacherHome(){
   const list = S.students
   const q = S.search.toLowerCase()
-  const filtered = list.filter(s => {
-    if (q && !(s.name.toLowerCase().includes(q) || s.class_code.toLowerCase().includes(q))) return false
-    return true
-  })
-
-  const totalSubs = list.length
+  const filtered = list.filter(s => !q || s.name.toLowerCase().includes(q) || s.class_code.toLowerCase().includes(q))
   const liveCount = WEEKS.filter(w => w.live).length
-
   const row = (s) => `
     <div class="card p-4 hover:shadow-float transition cursor-pointer" onclick="doOpenStudent('${esc(s.id)}')">
       <div class="flex items-center gap-3">
@@ -1178,9 +1261,7 @@ function viewTeacherHome(){
         <span class="text-[11.5px] text-stone">→</span>
       </div>
     </div>`
-
-  const emptyState = `<div class="card p-12 text-center"><p class="text-stone">Chưa có học viên nào đăng nhập.</p></div>`
-
+  const empty = `<div class="card p-12 text-center"><p class="text-stone">Chưa có học viên nào đăng nhập.</p></div>`
   return `<div class="min-h-screen">
     <header class="bg-white border-b border-chalk px-6 py-4 sticky top-0 z-10">
       <div class="max-w-5xl mx-auto flex items-center justify-between">
@@ -1196,72 +1277,49 @@ function viewTeacherHome(){
     </header>
     <main class="max-w-5xl mx-auto px-6 py-7">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        <div class="card p-4"><p class="lbl-mute mb-1">Tổng học viên</p><p class="font-display text-[26px] font-medium">${totalSubs}</p></div>
+        <div class="card p-4"><p class="lbl-mute mb-1">Tổng học viên</p><p class="font-display text-[26px] font-medium">${list.length}</p></div>
         <div class="card p-4"><p class="lbl-mute mb-1">Tuần đang mở</p><p class="font-display text-[26px] font-medium">${liveCount}</p></div>
         <div class="card p-4 bg-forest text-white border-forest">
           <p class="text-[10.5px] font-semibold tracking-[0.08em] uppercase text-gold mb-1">Hôm nay</p>
-          <p class="text-[13px] leading-[1.5]">Click vào học viên để xem chi tiết & chữa bài</p>
+          <p class="text-[13px] leading-[1.5]">Click vào HV để xem chi tiết & chữa bài</p>
         </div>
       </div>
       <div class="flex gap-2 mb-4 items-center flex-wrap">
         <input class="input flex-1 min-w-[200px]" placeholder="🔍 Tìm theo tên hoặc mã lớp..." oninput="set({search:this.value})" value="${esc(S.search)}">
       </div>
-      <div class="grid gap-2">
-        ${filtered.length === 0 ? emptyState : filtered.map(row).join('')}
-      </div>
+      <div class="grid gap-2">${filtered.length === 0 ? empty : filtered.map(row).join('')}</div>
     </main>
   </div>`
 }
 
-/* =====================================================================
-   VIEWS — Teacher: Student Detail
-   ===================================================================== */
 function viewTeacherStudent(){
   const s = S.selStudent
   const subs = S.selStudentSubs, prog = S.selStudentProg
   const liveWeeks = WEEKS.filter(w => w.live)
-
   const totalCompleted = liveWeeks.filter(w => subs[w.id+'-inClass'] && subs[w.id+'-homework']).length
   const totalScore = liveWeeks.reduce((a,w)=> a + (subs[w.id+'-inClass']?.score||0) + (subs[w.id+'-homework']?.score||0), 0)
   const totalMax   = liveWeeks.reduce((a,w)=> a + (subs[w.id+'-inClass']?.total||0) + (subs[w.id+'-homework']?.total||0), 0)
   const theoryDone = liveWeeks.filter(w => prog[w.id]).length
-
-  /* Activity timeline (sorted by submitted_at desc) */
   const activities = []
-  liveWeeks.forEach(w => {
-    ['inClass','homework'].forEach(t => {
-      const sub = subs[w.id+'-'+t]
-      if (sub) activities.push({ wid:w.id, type:t, week:w, sub, when: new Date(sub.submittedAt) })
-    })
-  })
+  liveWeeks.forEach(w => { ['inClass','homework'].forEach(t => { const sub = subs[w.id+'-'+t]; if (sub) activities.push({wid:w.id, type:t, week:w, sub, when: new Date(sub.submittedAt)}) }) })
   activities.sort((a,b) => b.when - a.when)
 
   const weekRow = (w) => {
-    const ic = subs[w.id+'-inClass'], hw = subs[w.id+'-homework']
-    const t = prog[w.id]
+    const ic = subs[w.id+'-inClass'], hw = subs[w.id+'-homework'], t = prog[w.id]
     const cell = (s, type) => {
       if (!s) return `<button class="btn-ghost text-stone text-[12px]" disabled>Chưa nộp</button>`
       const pct = s.total ? Math.round(s.score/s.total*100) : 0
       const cl = pct >= 80 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : pct >= 50 ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-rose-700 bg-rose-50 border-rose-200'
-      return `<button class="px-3 py-1.5 rounded-md border ${cl} text-[12px] font-semibold hover:opacity-80 transition" onclick="event.stopPropagation();doOpenReview('${s.studentId||S.selStudent.id}','${w.id}','${type}')">${s.score}/${s.total} · ${pct}%</button>`
+      return `<button class="px-3 py-1.5 rounded-md border ${cl} text-[12px] font-semibold hover:opacity-80 transition" onclick="event.stopPropagation();doOpenReview('${S.selStudent.id}','${w.id}','${type}')">${s.score}/${s.total} · ${pct}%</button>`
     }
     return `<div class="card p-4 grid grid-cols-12 gap-3 items-center">
       <div class="col-span-12 md:col-span-5">
         <p class="text-[10.5px] text-gold font-semibold uppercase tracking-wider">${esc(w.wk)} · ${esc(w.course)}</p>
         <p class="text-[14px] font-medium text-ink mt-0.5">${esc(w.title)}</p>
       </div>
-      <div class="col-span-4 md:col-span-2 text-center">
-        <p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">Lý thuyết</p>
-        ${t ? '<span class="chip-correct">✓ Xong</span>' : '<span class="chip-empty">Chưa</span>'}
-      </div>
-      <div class="col-span-4 md:col-span-2 text-center">
-        <p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">Trên lớp</p>
-        ${cell(ic, 'inClass')}
-      </div>
-      <div class="col-span-4 md:col-span-3 text-center">
-        <p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">BTVN</p>
-        ${cell(hw, 'homework')}
-      </div>
+      <div class="col-span-4 md:col-span-2 text-center"><p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">Lý thuyết</p>${t?'<span class="chip-correct">✓ Xong</span>':'<span class="chip-empty">Chưa</span>'}</div>
+      <div class="col-span-4 md:col-span-2 text-center"><p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">Trên lớp</p>${cell(ic,'inClass')}</div>
+      <div class="col-span-4 md:col-span-3 text-center"><p class="text-[10.5px] text-stone uppercase tracking-wider mb-1">BTVN</p>${cell(hw,'homework')}</div>
     </div>`
   }
 
@@ -1270,10 +1328,7 @@ function viewTeacherStudent(){
       <button class="btn" onclick="backToTeacher()">← Danh sách</button>
       <div class="flex items-center gap-3 flex-1 min-w-0">
         <div class="w-9 h-9 rounded-full bg-forest text-white flex items-center justify-center font-semibold">${esc((s.name||'?').slice(0,1).toUpperCase())}</div>
-        <div class="min-w-0">
-          <p class="text-[14px] font-medium text-ink truncate">${esc(s.name)}</p>
-          <p class="text-[11.5px] text-stone">Mã lớp: ${esc(s.class_code)}</p>
-        </div>
+        <div class="min-w-0"><p class="text-[14px] font-medium text-ink truncate">${esc(s.name)}</p><p class="text-[11.5px] text-stone">Mã lớp: ${esc(s.class_code)}</p></div>
       </div>
     </header>
     <main class="max-w-6xl mx-auto px-5 py-6 fade-in">
@@ -1283,12 +1338,8 @@ function viewTeacherStudent(){
         <div class="card p-4"><p class="lbl-mute mb-1">Lý thuyết</p><p class="font-display text-[24px] font-medium">${theoryDone}<span class="text-stone text-[14px]">/${liveWeeks.length}</span></p></div>
         <div class="card p-4"><p class="lbl-mute mb-1">Hoạt động</p><p class="font-display text-[24px] font-medium">${activities.length}</p></div>
       </div>
-
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div class="lg:col-span-2">
-          <p class="lbl-mute mb-3">📚 Tiến độ theo tuần</p>
-          <div class="grid gap-2">${liveWeeks.map(weekRow).join('')}</div>
-        </div>
+        <div class="lg:col-span-2"><p class="lbl-mute mb-3">📚 Tiến độ theo tuần</p><div class="grid gap-2">${liveWeeks.map(weekRow).join('')}</div></div>
         <div>
           <p class="lbl-mute mb-3">🕒 Hoạt động gần đây</p>
           <div class="card p-2 divide-y divide-mist">
@@ -1296,14 +1347,11 @@ function viewTeacherStudent(){
               activities.slice(0,12).map(a => {
                 const pct = a.sub.total ? Math.round(a.sub.score/a.sub.total*100) : 0
                 return `<div class="p-3 hover:bg-bone transition cursor-pointer" onclick="doOpenReview('${S.selStudent.id}','${a.wid}','${a.type}')">
-                  <div class="flex items-center justify-between gap-2">
-                    <p class="text-[12.5px] font-medium text-ink">${esc(a.week.wk)} · ${a.type==='inClass'?'Trên lớp':'BTVN'}</p>
-                    <span class="text-[11.5px] font-semibold ${pct>=80?'text-emerald-700':pct>=50?'text-amber-700':'text-rose-700'}">${a.sub.score}/${a.sub.total}</span>
-                  </div>
+                  <div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-medium text-ink">${esc(a.week.wk)} · ${a.type==='inClass'?'Trên lớp':'BTVN'}</p>
+                    <span class="text-[11.5px] font-semibold ${pct>=80?'text-emerald-700':pct>=50?'text-amber-700':'text-rose-700'}">${a.sub.score}/${a.sub.total}</span></div>
                   <p class="text-[11px] text-stone mt-0.5">${a.when.toLocaleString('vi-VN')}</p>
                 </div>`
-              }).join('')
-            }
+              }).join('')}
           </div>
         </div>
       </div>
@@ -1311,16 +1359,12 @@ function viewTeacherStudent(){
   </div>`
 }
 
-/* =====================================================================
-   VIEWS — Teacher Review (split-screen grading)
-   ===================================================================== */
 function viewTeacherReview(){
   const week = getWeek(S.selWid); if (!week) return ''
   const ex = getEx(week, S.revType)
   const answers = S.revAnswers
   const auto = S.revAuto
-  const merged = { ...auto, ...(S.rev.marks || {}) }   // GV override auto
-
+  const merged = { ...auto, ...(S.rev.marks || {}) }
   const switchBtn = (other, lbl) => `<button class="btn" onclick="switchRevType('${other}')">→ ${lbl}</button>`
 
   const head = `
@@ -1345,14 +1389,13 @@ function viewTeacherReview(){
       </div></div>`
   }
 
-  /* Quick stats banner */
   const pct = sub.total ? Math.round(sub.score/sub.total*100) : 0
   const banner = `<div class="bg-bone border-b border-chalk px-5 py-2.5 flex items-center gap-4 text-[12.5px] sticky top-[57px] z-20 flex-wrap">
     <span class="lbl-amber">${S.revType==='inClass'?'Bài trên lớp':'BTVN'}</span>
     <span class="text-stone">·</span>
     <span class="text-ink">Điểm tự chấm: <strong class="${pct>=80?'text-emerald-700':pct>=50?'text-amber-700':'text-rose-700'}">${sub.score}/${sub.total} (${pct}%)</strong></span>
     <span class="text-stone hidden md:inline">·</span>
-    <span class="text-stone hidden md:inline">Highlight tự do: kéo chọn text bất kỳ ở 2 panel để tô màu</span>
+    <span class="text-stone hidden md:inline">Highlight tự do: kéo chọn text bất kỳ ở 2 panel</span>
   </div>`
 
   const revItem = (item) => {
@@ -1362,9 +1405,7 @@ function viewTeacherReview(){
     const studentAns = item.kind === 'mcq-multi'
       ? item.nums.map(n => answers[n]).filter(Boolean).join(', ') || '—'
       : (answers[item.num] || '—')
-    const defaultCorrect = item.kind === 'mcq-multi'
-      ? item.answers.join(', ')
-      : (Array.isArray(item.answer) ? item.answer.join(' / ') : item.answer)
+    const defaultCorrect = item.kind === 'mcq-multi' ? item.answers.join(', ') : (Array.isArray(item.answer) ? item.answer.join(' / ') : item.answer)
     return `<div class="border-b border-mist pb-4 mb-4 last:border-0 last:mb-0 last:pb-0">
       <p class="text-[12.5px] text-stone mb-1.5"><span class="font-bold text-ink mr-1">${num}.</span>${esc(item.qText)}</p>
       <div class="flex items-center gap-2 flex-wrap mb-2">
@@ -1393,7 +1434,6 @@ function viewTeacherReview(){
       <p class="text-[11px] text-stone mb-4">💡 Kéo chọn text để highlight (5 màu)</p>
       <div class="font-serif">${passageHTML(passage, {withHighlights:true})}</div>
     </aside>`
-    /* Right: rendered exercise (read-only with marks) + grading panel */
     const exView = ex.sections.map(sec => renderSection(sec, answers, true, S.revType==='inClass'?'IC':'HW',
       { showCorrect:true, marks:merged, correctOverride:S.rev.correct_answers, withHighlights:true })).join('')
     const gradingItems = listAllItems(ex)
@@ -1402,53 +1442,30 @@ function viewTeacherReview(){
         <p class="text-[11px] font-semibold uppercase tracking-wider text-gold mb-1.5">⚙️ Bảng chữa bài</p>
         <p class="text-[12.5px] text-white/80 leading-[1.55]">Override đúng/sai, điền đáp án chuẩn, ghi nhận xét cho từng câu. Tự lưu khi bấm "Lưu nhận xét".</p>
       </div>
-      <div class="card p-5 mb-4">
-        <p class="lbl mb-3">📋 Bài làm của học viên (đã chấm tự động)</p>
-        ${exView}
-      </div>
-      <div class="card p-5">
-        <p class="lbl mb-3">✏️ Chữa từng câu</p>
-        ${gradingItems.map(revItem).join('')}
-      </div>
+      <div class="card p-5 mb-4"><p class="lbl mb-3">📋 Bài làm của học viên (đã chấm tự động)</p>${exView}</div>
+      <div class="card p-5"><p class="lbl mb-3">✏️ Chữa từng câu</p>${gradingItems.map(revItem).join('')}</div>
     </section>`
   } else {
-    /* Listening: form layout */
     leftPanel = `<aside class="bg-white border-r border-chalk pane-scroll p-7">
       <p class="lbl mb-2">🎧 Audio · ${esc(ex.formTitle)}</p>
       <audio controls preload="metadata" class="w-full mb-4"><source src="${esc(ex.audioUrl)}" type="audio/mpeg"></audio>
       <p class="text-[11px] text-stone mb-4">💡 Kéo chọn text để highlight</p>
-      <div class="card p-4 bg-bone">
-        <p class="lbl mb-2">📋 Form gốc</p>
-        ${renderFormItems(ex.formItems, answers, true, S.revType==='inClass'?'IC':'HW', { showCorrect:true, marks:merged, correctOverride:S.rev.correct_answers })}
-      </div>
+      <div class="card p-4 bg-bone"><p class="lbl mb-2">📋 Form gốc</p>${renderFormItems(ex.formItems, answers, true, S.revType==='inClass'?'IC':'HW', { showCorrect:true, marks:merged, correctOverride:S.rev.correct_answers })}</div>
     </aside>`
     const gradingItems = listAllItems(ex)
-    rightPanel = `<section class="bg-cream pane-scroll p-7">
-      <div class="card p-5">
-        <p class="lbl mb-3">✏️ Chữa từng câu</p>
-        ${gradingItems.map(revItem).join('')}
-      </div>
-    </section>`
+    rightPanel = `<section class="bg-cream pane-scroll p-7"><div class="card p-5"><p class="lbl mb-3">✏️ Chữa từng câu</p>${gradingItems.map(revItem).join('')}</div></section>`
   }
 
   return `<div class="min-h-screen">${head}${banner}
-    <div class="grid gap-0" style="grid-template-columns:1fr 1fr;height:calc(100vh - 113px)">
-      ${leftPanel}${rightPanel}
-    </div>
+    <div class="grid gap-0" style="grid-template-columns:1fr 1fr;height:calc(100vh - 113px)">${leftPanel}${rightPanel}</div>
     <style>@media(max-width:900px){.grid[style*="1fr 1fr"]{grid-template-columns:1fr!important;height:auto!important}}</style>
   </div>`
 }
 
-/* =====================================================================
-   VIEWS — Shared Result (qua URL ?share=token)
-   ===================================================================== */
 function viewShared(){
   const ctx = S.sharedCtx
   if (!ctx) return ''
-  if (!S.user){
-    return viewLogin()
-  }
-  /* Quyền: là chính học viên đó hoặc giáo viên */
+  if (!S.user) return viewLogin()
   if (S.user.role !== 'teacher' && S.user.id !== ctx.student_id){
     return `<div class="min-h-screen flex items-center justify-center px-4">
       <div class="card p-8 max-w-md text-center">
@@ -1459,25 +1476,20 @@ function viewShared(){
       </div>
     </div>`
   }
-  /* Render result */
   S.selWid = ctx.week_id; S.resultType = ctx.sub_type
   return viewResult()
 }
 
-function viewLoading(){
-  return `<div class="min-h-screen flex items-center justify-center"><div class="spinner"></div></div>`
-}
+function viewLoading(){ return `<div class="min-h-screen flex items-center justify-center"><div class="spinner"></div></div>` }
 
-/* =====================================================================
-   MAIN RENDER
-   ===================================================================== */
 function render(){
   const root = document.getElementById('app')
   clearHlToolbar()
   if (S.loading){ root.innerHTML = viewLoading(); return }
   switch(S.view){
     case 'login':     root.innerHTML = viewLogin(); break
-    case 's-home':    root.innerHTML = viewStudentHome(); break
+    case 'courses':   root.innerHTML = viewCourses(); break
+    case 'course':    root.innerHTML = viewCourseOutline(); break
     case 'week':      root.innerHTML = viewWeekDetail(); break
     case 'result':    root.innerHTML = viewResult(); break
     case 't-home':    root.innerHTML = viewTeacherHome(); break
@@ -1503,83 +1515,89 @@ async function doLogin(){
     if (code === TEACHER_PASS){
       const students = await dbLoadAllStudents()
       const user = { role:'teacher', name, id:'teacher' }
-      /* Nếu đến từ shared link */
       if (S.sharedCtx){ set({ user, view:'shared' }); return }
-      set({ view:'t-home', user, students })
-      return
+      set({ view:'t-home', user, students }); return
     }
     const studentId = await dbUpsertStudent(name, code)
     const { subs, prog } = await dbLoadStudentData(studentId)
     const user = { role:'student', name, id:studentId }
     if (S.sharedCtx){ set({ user, subs, prog, view:'shared' }); return }
-    set({ view:'s-home', user, subs, prog })
+    set({ view:'courses', user, subs, prog })
   } catch(e){
-    console.error(e)
-    toast('Lỗi kết nối. Kiểm tra mạng và thử lại.','error')
+    console.error(e); toast('Lỗi kết nối. Kiểm tra mạng và thử lại.','error')
     if (btn){ btn.textContent='Vào học →'; btn.disabled=false }
   }
 }
-
 function doLogout(){
-  /* Clear URL share param */
   if (location.search) history.replaceState(null,'',location.pathname)
   set({
-    view:'login', user:null, subs:{}, prog:{}, students:[], selStudent:null, selWid:null,
+    view:'login', user:null, subs:{}, prog:{}, students:[], selStudent:null, selCourse:null, selWid:null,
     activeTab:'theory', ansIC:{}, ansHW:{}, submittedIC:false, submittedHW:false,
     rev:{marks:{},comments:{},correct_answers:{},highlights:[]}, revAuto:{}, revAnswers:{},
     highlights:[], sharedCtx:null, shareUrl:null, resultType:null, expandExplain:{}
   })
 }
+function doPickCourse(cid){ set({ view:'course', selCourse: cid }) }
+function backToCourses(){ set({ view:'courses', selCourse:null, selWid:null }) }
+function backToCourse(){
+  /* Quay lại course outline (giữ selCourse). Nếu chưa biết course thì về courses */
+  if (S.selCourse) set({ view:'course', selWid:null, activeTab:'theory' })
+  else set({ view:'courses' })
+}
 
-function doPickWeek(wid){
+async function doPickWeek(wid){
   const week = getWeek(wid); if (!week || !week.live) return
   const ic = S.subs[wid+'-inClass'], hw = S.subs[wid+'-homework']
+  /* Tự động set selCourse nếu chưa có */
+  let selCourse = S.selCourse
+  if (!selCourse){ const c = COURSES.find(c => c.weekIds.includes(wid)); if (c) selCourse = c.id }
+  /* Load highlights của student cho week này (cả inClass + homework) */
+  const [hlIC, hlHW] = await Promise.all([
+    dbLoadHighlights(S.user.id, wid, 'inClass'),
+    dbLoadHighlights(S.user.id, wid, 'homework'),
+  ])
   set({
-    view:'week', selWid:wid, activeTab:'theory',
+    view:'week', selWid:wid, selCourse, activeTab:'theory',
     ansIC: ic ? {...ic.answers} : buildEmptyAnswers(week.inClass),
     ansHW: hw ? {...hw.answers} : buildEmptyAnswers(week.homework),
-    submittedIC: !!ic, submittedHW: !!hw, confirmType:null, shareUrl:null, expandExplain:{}
+    submittedIC: !!ic, submittedHW: !!hw, confirmType:null, shareUrl:null, expandExplain:{},
+    highlights: [...hlIC, ...hlHW]
   })
 }
 
-function setTab(tab){ set({ activeTab: tab, expandExplain:{} }) }
+async function setTab(tab){
+  set({ activeTab: tab, expandExplain:{} })
+  /* Reload highlights cho sub_type đang xem (đã preload cả 2 lúc pickWeek nên không cần) */
+}
 
 function setAns(which, n, v){
   if (which === 'IC') set(p => ({ ansIC: {...p.ansIC, [n]: v } }))
   else                set(p => ({ ansHW: {...p.ansHW, [n]: v } }))
 }
-
-/* mcq-multi: chọn pickN letters, lưu vào nums theo thứ tự click */
 function pickMulti(role, numsStr, pickN, letter){
   const nums = numsStr.split(',').map(Number)
   const slot = role === 'IC' ? 'ansIC' : 'ansHW'
   const cur = { ...S[slot] }
-  /* Nếu letter đã chọn → bỏ */
   const idx = nums.findIndex(n => cur[n] === letter)
   if (idx >= 0){
     cur[nums[idx]] = ''
-    /* Dồn các letter còn lại lên đầu */
     const remaining = nums.map(n => cur[n]).filter(Boolean)
     nums.forEach((n,i) => cur[n] = remaining[i] || '')
   } else {
-    /* Tìm slot trống đầu tiên */
     const emptyIdx = nums.findIndex(n => !cur[n])
     if (emptyIdx >= 0) cur[nums[emptyIdx]] = letter
-    else { /* full: thay thế cuối */ cur[nums[nums.length-1]] = letter }
+    else cur[nums[nums.length-1]] = letter
   }
   set({ [slot]: cur })
 }
-
 function trySubmit(type){
-  const week = getWeek(S.selWid)
-  const ex = getEx(week, type)
+  const week = getWeek(S.selWid); const ex = getEx(week, type)
   const total = countQs(ex)
   const answers = type === 'inClass' ? S.ansIC : S.ansHW
   const filled = Object.values(answers).filter(v => v && String(v).trim()).length
   if (filled < total){ toast(`Còn ${total - filled} câu chưa trả lời.`,'error'); return }
   set({ confirmType: type })
 }
-
 async function doSubmit(){
   const type = S.confirmType, wid = S.selWid
   const week = getWeek(wid); const ex = getEx(week, type)
@@ -1589,76 +1607,39 @@ async function doSubmit(){
     await dbSubmit(S.user.id, wid, type, answers, marks, score, total)
     const updated = { ...S.subs, [wid+'-'+type]: { answers:{...answers}, auto_marks:marks, score, total, submittedAt:new Date().toISOString() } }
     const patch = { subs: updated, confirmType:null, view:'result', resultType:type, shareUrl:null, rev:{marks:{},comments:{},correct_answers:{},highlights:[]} }
-    if (type === 'inClass') patch.submittedIC = true
-    else                    patch.submittedHW = true
-    /* Load review để lấy correct_answers override (nếu GV đã chỉnh) */
-    try {
-      const r = await dbLoadReview(S.user.id, wid, type)
-      if (r) patch.rev = { marks:r.marks||{}, comments:r.comments||{}, correct_answers:r.correct_answers||{}, highlights:r.highlights||[] }
-    } catch(_){}
-    set(patch)
-    toast(`Nộp thành công! Bạn được ${score}/${total} 🎉`)
-  } catch(e){
-    console.error(e); toast('Lỗi khi nộp bài. Thử lại.','error')
-    set({ confirmType:null })
-  }
+    if (type === 'inClass') patch.submittedIC = true; else patch.submittedHW = true
+    try { const r = await dbLoadReview(S.user.id, wid, type); if (r) patch.rev = { marks:r.marks||{}, comments:r.comments||{}, correct_answers:r.correct_answers||{}, highlights:r.highlights||[] } } catch(_){}
+    set(patch); toast(`Nộp thành công! Bạn được ${score}/${total} 🎉`)
+  } catch(e){ console.error(e); toast('Lỗi khi nộp bài. Thử lại.','error'); set({ confirmType:null }) }
 }
-
 async function viewMyResult(type){
-  const wid = S.selWid
-  set({ loading:true })
+  const wid = S.selWid; set({ loading:true })
   try {
-    let r = null
-    try { r = await dbLoadReview(S.user.id, wid, type) } catch(_){}
-    set({
-      loading:false, view:'result', resultType:type, shareUrl:null,
-      rev: r ? { marks:r.marks||{}, comments:r.comments||{}, correct_answers:r.correct_answers||{}, highlights:r.highlights||[] }
-             : {marks:{},comments:{},correct_answers:{},highlights:[]}
-    })
+    let r = null; try { r = await dbLoadReview(S.user.id, wid, type) } catch(_){}
+    set({ loading:false, view:'result', resultType:type, shareUrl:null,
+      rev: r ? { marks:r.marks||{}, comments:r.comments||{}, correct_answers:r.correct_answers||{}, highlights:r.highlights||[] } : {marks:{},comments:{},correct_answers:{},highlights:[]} })
   } catch(e){ set({ loading:false }) }
 }
-
-function backFromResult(){
-  set({ view:'week', resultType:null, shareUrl:null, expandExplain:{} })
-}
-
+function backFromResult(){ set({ view:'week', resultType:null, shareUrl:null, expandExplain:{} }) }
 async function markTheory(wid){
   const next = !S.prog[wid]
-  try {
-    await dbSaveTheory(S.user.id, wid, next)
-    set(p => ({ prog: {...p.prog, [wid]: next } }))
-    toast(next?'Đã đánh dấu hoàn thành lý thuyết':'Đã bỏ đánh dấu')
-  } catch(e){ toast('Lỗi khi lưu.','error') }
+  try { await dbSaveTheory(S.user.id, wid, next); set(p => ({ prog: {...p.prog, [wid]: next } })); toast(next?'Đã đánh dấu hoàn thành lý thuyết':'Đã bỏ đánh dấu') }
+  catch(e){ toast('Lỗi khi lưu.','error') }
 }
+function toggleExplain(num){ const k = String(num); set(p => ({ expandExplain: {...p.expandExplain, [k]: !p.expandExplain[k] } })) }
 
-function toggleExplain(num){
-  const k = String(num)
-  set(p => ({ expandExplain: {...p.expandExplain, [k]: !p.expandExplain[k] } }))
-}
-
-/* =====================================================================
-   SHARE
-   ===================================================================== */
 async function doShare(){
   if (S.shareUrl){ copyShare(); return }
   try {
     const token = await dbCreateShareToken(S.user.id, S.selWid, S.resultType)
     const url = location.origin + location.pathname + '?share=' + token
     set({ shareUrl: url })
-    /* Copy ngay luôn */
-    try { await navigator.clipboard.writeText(url); toast('Đã tạo link & copy vào clipboard') }
-    catch(_){ toast('Đã tạo link, bấm Copy bên dưới') }
+    try { await navigator.clipboard.writeText(url); toast('Đã tạo link & copy vào clipboard') } catch(_){ toast('Đã tạo link, bấm Copy bên dưới') }
   } catch(e){ toast('Lỗi tạo share link','error') }
 }
-async function copyShare(){
-  if (!S.shareUrl) return
-  try { await navigator.clipboard.writeText(S.shareUrl); toast('Đã copy link') }
-  catch(_){ toast('Không copy được, vui lòng chọn thủ công','error') }
-}
+async function copyShare(){ if (!S.shareUrl) return; try { await navigator.clipboard.writeText(S.shareUrl); toast('Đã copy link') } catch(_){ toast('Không copy được','error') } }
 
-/* =====================================================================
-   TEACHER ACTIONS
-   ===================================================================== */
+/* Teacher actions */
 async function doOpenStudent(studentId){
   set({ loading:true })
   try {
@@ -1667,94 +1648,50 @@ async function doOpenStudent(studentId){
     set({ view:'t-student', selStudent:student, selStudentSubs:subs, selStudentProg:prog, loading:false })
   } catch(e){ console.error(e); toast('Lỗi tải hồ sơ HV','error'); set({loading:false}) }
 }
-
 async function doOpenReview(studentId, wid, type){
   set({ loading:true })
   try {
     const student = S.students.find(s => s.id === studentId) || S.selStudent || { id:studentId, name:'Học viên' }
-    const [subs, savedRev, hls] = await Promise.all([
-      dbLoadStudentSubs(studentId), dbLoadReview(studentId, wid, type), dbLoadHighlights(studentId, wid, type)
-    ])
+    const [subs, savedRev, hls] = await Promise.all([ dbLoadStudentSubs(studentId), dbLoadReview(studentId, wid, type), dbLoadHighlights(studentId, wid, type) ])
     const sub = subs[wid+'-'+type]
     const initRev = { marks:{}, comments:{}, correct_answers:{}, highlights: [] }
-    if (savedRev){
-      Object.assign(initRev.marks, savedRev.marks || {})
-      Object.assign(initRev.comments, savedRev.comments || {})
-      Object.assign(initRev.correct_answers, savedRev.correct_answers || {})
-      initRev.highlights = savedRev.highlights || []
-    }
-    set({
-      view:'t-review', selStudent:student, selWid:wid, revType:type,
-      selStudentSubs:subs, subs, revAnswers: sub?.answers || {}, revAuto: sub?.auto_marks || {},
-      rev: initRev, highlights: hls, loading:false
-    })
+    if (savedRev){ Object.assign(initRev.marks, savedRev.marks||{}); Object.assign(initRev.comments, savedRev.comments||{}); Object.assign(initRev.correct_answers, savedRev.correct_answers||{}); initRev.highlights = savedRev.highlights||[] }
+    set({ view:'t-review', selStudent:student, selWid:wid, revType:type, selStudentSubs:subs, subs, revAnswers: sub?.answers||{}, revAuto: sub?.auto_marks||{}, rev: initRev, highlights: hls, loading:false })
   } catch(e){ console.error(e); toast('Lỗi tải dữ liệu','error'); set({loading:false}) }
 }
-
 async function switchRevType(newType){
   set({ loading:true })
   try {
-    const [subs, savedRev, hls] = await Promise.all([
-      dbLoadStudentSubs(S.selStudent.id), dbLoadReview(S.selStudent.id, S.selWid, newType), dbLoadHighlights(S.selStudent.id, S.selWid, newType)
-    ])
+    const [subs, savedRev, hls] = await Promise.all([ dbLoadStudentSubs(S.selStudent.id), dbLoadReview(S.selStudent.id, S.selWid, newType), dbLoadHighlights(S.selStudent.id, S.selWid, newType) ])
     const sub = subs[S.selWid+'-'+newType]
     const initRev = { marks:{}, comments:{}, correct_answers:{}, highlights: [] }
-    if (savedRev){
-      Object.assign(initRev.marks, savedRev.marks || {})
-      Object.assign(initRev.comments, savedRev.comments || {})
-      Object.assign(initRev.correct_answers, savedRev.correct_answers || {})
-      initRev.highlights = savedRev.highlights || []
-    }
+    if (savedRev){ Object.assign(initRev.marks, savedRev.marks||{}); Object.assign(initRev.comments, savedRev.comments||{}); Object.assign(initRev.correct_answers, savedRev.correct_answers||{}); initRev.highlights = savedRev.highlights||[] }
     set({ revType:newType, selStudentSubs:subs, subs, revAnswers: sub?.answers||{}, revAuto: sub?.auto_marks||{}, rev: initRev, highlights: hls, loading:false })
   } catch(e){ set({loading:false}) }
 }
-
 async function backToTeacher(){
   set({ loading:true })
-  try {
-    const students = await dbLoadAllStudents()
-    set({ view:'t-home', students, selStudent:null, selWid:null, loading:false })
-  } catch(e){ set({loading:false}) }
+  try { const students = await dbLoadAllStudents(); set({ view:'t-home', students, selStudent:null, selWid:null, loading:false }) } catch(e){ set({loading:false}) }
 }
-
-function backFromReview(){
-  if (S.selStudent) set({ view:'t-student' })
-  else backToTeacher()
-}
-
+function backFromReview(){ if (S.selStudent) set({ view:'t-student' }); else backToTeacher() }
 function setMark(num, v){
-  const cur = (S.rev.marks||{})[num]
-  const next = cur === v ? null : v
-  const marks = { ...(S.rev.marks||{}) }
-  if (next === null) delete marks[num]; else marks[num] = next
+  const cur = (S.rev.marks||{})[num]; const next = cur === v ? null : v
+  const marks = { ...(S.rev.marks||{}) }; if (next === null) delete marks[num]; else marks[num] = next
   set(p => ({ rev: { ...p.rev, marks } }))
 }
-function setComment(num, v){
-  const comments = { ...(S.rev.comments||{}), [num]: v }
-  set(p => ({ rev: { ...p.rev, comments } }))
-}
-function setCorrect(num, v){
-  const correct_answers = { ...(S.rev.correct_answers||{}) }
-  if (v === '') delete correct_answers[num]; else correct_answers[num] = v
-  set(p => ({ rev: { ...p.rev, correct_answers } }))
-}
+function setComment(num, v){ const comments = { ...(S.rev.comments||{}), [num]: v }; set(p => ({ rev: { ...p.rev, comments } })) }
+function setCorrect(num, v){ const correct_answers = { ...(S.rev.correct_answers||{}) }; if (v === '') delete correct_answers[num]; else correct_answers[num] = v; set(p => ({ rev: { ...p.rev, correct_answers } })) }
 
 async function doSaveReview(){
   try {
-    /* Lưu review */
     await dbSaveReview(S.selStudent.id, S.selWid, S.revType, S.rev)
-    /* Re-grade lại submission với correct_answers override để cập nhật score */
     const week = getWeek(S.selWid); const ex = getEx(week, S.revType)
-    /* Build override map: mỗi key = num (string), value = correct text */
     const override = { ...S.rev.correct_answers }
     const { marks: autoMarks, score, total } = autoGrade(ex, S.revAnswers, override)
-    /* Apply teacher marks override on top */
     const finalMarks = { ...autoMarks, ...S.rev.marks }
-    let finalScore = 0
-    Object.values(finalMarks).forEach(m => { if (m === 'correct') finalScore += 1 })
+    let finalScore = 0; Object.values(finalMarks).forEach(m => { if (m === 'correct') finalScore += 1 })
     await dbSubmit(S.selStudent.id, S.selWid, S.revType, S.revAnswers, finalMarks, finalScore, total)
-    set(p => ({ revAuto: finalMarks }))
-    toast('Đã lưu nhận xét & cập nhật điểm')
+    set(p => ({ revAuto: finalMarks })); toast('Đã lưu nhận xét & cập nhật điểm')
   } catch(e){ console.error(e); toast('Lỗi khi lưu','error') }
 }
 
@@ -1766,13 +1703,9 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') clearHlToolbar()
 })
 document.addEventListener('mouseup', () => setTimeout(onMouseUpHighlight, 0))
-document.addEventListener('mousedown', e => {
-  /* Click ngoài toolbar → đóng */
-  if (!e.target.closest('.hl-toolbar')) clearHlToolbar()
-})
+document.addEventListener('mousedown', e => { if (!e.target.closest('.hl-toolbar')) clearHlToolbar() })
 
 async function init(){
-  /* Check ?share= */
   const params = new URLSearchParams(location.search)
   const token = params.get('share')
   if (token){
@@ -1786,7 +1719,6 @@ async function init(){
   }
   render()
 }
-
 init()
 </script>
 </body>
