@@ -69,7 +69,8 @@
   .seg-wrap { @apply inline-flex items-center bg-mist rounded-full p-1 shadow-inner; }
   .seg      { @apply px-4 sm:px-5 py-2 rounded-full text-[13px] font-medium text-stone hover:text-ink transition cursor-pointer flex items-center gap-1.5; }
   .seg.act  { @apply bg-white text-forest shadow-card; }
-  .seg.act .seg-dot { @apply w-1.5 h-1.5 rounded-full bg-moss; }
+  .seg.act .seg-dot { @apply w-1.5 h-1.5 rounded-full bg-moss; animation:pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:.45;transform:scale(.85)} }
   /* Highlight colors */
   mark.h-yellow{ background:var(--hl-yellow); border-bottom:1.5px solid var(--hl-yellow-bd); padding:0 1px; border-radius:2px; }
   mark.h-green { background:var(--hl-green);  border-bottom:1.5px solid var(--hl-green-bd);  padding:0 1px; border-radius:2px; }
@@ -119,6 +120,31 @@
   /* Vertical resize handle visual (not draggable yet) */
   .pane-divider{ width:14px; background:#e9ecef; border-left:1px solid #d6d9de; border-right:1px solid #d6d9de; display:flex; align-items:center; justify-content:center; }
   .pane-divider .grip{ width:4px; height:36px; background:#bcc3cc; border-radius:2px; }
+  /* Matching/Table styles */
+  .mtable      { border-collapse:collapse; width:100%; font-size:13.5px; }
+  .mtable th   { padding:8px 10px; text-align:left; font-weight:600; color:#0f1411; background:#f4f6f8; border:1px solid #e2dfd6; }
+  .mtable td   { padding:8px 10px; border:1px solid #e2dfd6; vertical-align:top; }
+  .mtable .cell-radio{ text-align:center; cursor:pointer; transition:background .12s; }
+  .mtable .cell-radio:hover{ background:#f4f6f8; }
+  .mtable .cell-radio.sel{ background:var(--hl-blue); }
+  .mtable .cell-radio.sel-correct{ background:#dff5e6; }
+  .mtable .cell-radio.sel-wrong{ background:#ffe2e2; }
+  .endings-list{ background:#fafaf7; border:1px solid #e2dfd6; border-radius:8px; padding:14px 16px; margin-top:12px; }
+  .endings-list .row{ display:flex; gap:12px; padding:5px 0; font-size:13.5px; line-height:1.55; }
+  .endings-list .l{ font-weight:700; min-width:18px; color:#0f1411; }
+  /* Drag-drop bank + slots */
+  .dbank       { background:#fafaf7; border:1px solid #e2dfd6; border-radius:8px; padding:12px 14px; margin-top:14px; }
+  .dword       { display:inline-flex; align-items:center; padding:6px 12px; border:1px solid #e2dfd6; border-radius:6px; background:#fff; font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; user-select:none; }
+  .dword:hover { background:#f4f6f8; border-color:#888; }
+  .dword.sel   { background:#1a3a2e; color:#fff; border-color:#1a3a2e; transform:scale(1.04); box-shadow:0 4px 10px rgba(15,20,17,.18); }
+  .dword.used  { opacity:.3; text-decoration:line-through; cursor:not-allowed; }
+  .dword.used:hover{ background:#fff; border-color:#e2dfd6; }
+  .dslot       { display:inline-flex; align-items:center; gap:6px; min-width:90px; min-height:30px; padding:4px 10px; margin:0 4px; border:2px dashed #4a96e0; background:#cfe6ff66; border-radius:6px; cursor:pointer; vertical-align:middle; font-size:13px; font-weight:600; color:#0f1411; transition:all .15s; }
+  .dslot:hover { background:#cfe6ffaa; }
+  .dslot.filled{ border-style:solid; background:#cfe6ff; }
+  .dslot.armed { border-color:#1a3a2e; background:#dff5e6; box-shadow:0 0 0 3px rgba(26,58,46,.12); }
+  .dslot.correct{ background:#dff5e6; border-color:#4cb87a; }
+  .dslot.wrong  { background:#ffe2e2; border-color:#e0606a; }
 </style>
 </head>
 <body>
@@ -212,25 +238,80 @@ const READING_INCLASS = {
 const READING_HOMEWORK = {
   passageTitle: 'The Story of Tea',
   partLabel: 'Part 1',
-  partInstruction: 'Read the text and answer questions 1–8.',
+  partInstruction: 'Read the text and answer questions 1–16.',
   sections: [
-    { id:'s1', type:'gap-fill', title:'Questions 1–4',
+    { id:'s1', type:'gap-fill', title:'Questions 1–3',
       instruction:'Complete the summary below. Choose NO MORE THAN TWO WORDS from the passage for each answer.',
-      noteTitle:'The History of Tea',
+      noteTitle:'The Origins of Tea',
       items:[
         {num:1, before:'Tea originated in ancient China where it was first used for', after:'purposes.', answer:'medicinal'},
-        {num:2, before:'Emperor Shen Nong is said to have discovered tea by', after:'.', answer:'accident'},
-        {num:3, before:'Buddhist', after:'introduced tea to Japan in the 8th century.', answer:'monks'},
-        {num:4, before:'The British East India Company set up plantations in India to break China\'s', after:'.', answer:'monopoly'}
+        {num:2, before:'Buddhist', after:'introduced tea to Japan in the 8th century.', answer:'monks'},
+        {num:3, before:'The British East India Company set up plantations in India to break China\'s', after:'.', answer:'monopoly'}
       ]},
-    { id:'s2', type:'tfng', title:'Questions 5–8',
+    { id:'s2', type:'tfng', title:'Questions 4–6',
       instruction:'Choose TRUE / FALSE / NOT GIVEN.',
       items:[
-        {num:5, statement:'Tea is currently the most popular drink in the world.', answer:'FALSE'},
-        {num:6, statement:'The Japanese tea ceremony emphasises mindfulness.', answer:'TRUE'},
-        {num:7, statement:'Catherine of Braganza was the wife of King Charles II.', answer:'TRUE'},
-        {num:8, statement:'Indian tea is now more expensive than Chinese tea.', answer:'NOT GIVEN'}
-      ]}
+        {num:4, statement:'Tea is currently the most popular drink in the world.', answer:'FALSE'},
+        {num:5, statement:'The Japanese tea ceremony emphasises mindfulness.', answer:'TRUE'},
+        {num:6, statement:'Indian tea is now more expensive than Chinese tea.', answer:'NOT GIVEN'}
+      ]},
+    /* Dạng MỚI: Matching Endings — ghép vế đầu với vế cuối A–G */
+    { id:'s3', type:'matching-endings', title:'Questions 7–9',
+      instruction:'Complete each sentence with the correct ending. Choose the correct ending and move it into the gap.',
+      items:[
+        {num:7, sentence:'Tea spread to Japan because',                                    answer:'B', explain:'Đoạn 3: monks valued it for keeping them alert during meditation.'},
+        {num:8, sentence:'The British East India Company built plantations in India because', answer:'D'},
+        {num:9, sentence:'Modern researchers are interested in tea because',               answer:'C'}
+      ],
+      endings:[
+        {l:'A', t:'it was originally used for medical reasons in ancient times.'},
+        {l:'B', t:'monks valued it for staying alert during meditation.'},
+        {l:'C', t:'it contains compounds that may benefit human health.'},
+        {l:'D', t:'they wanted to break China\'s control over the global market.'},
+        {l:'E', t:'British people preferred it over coffee.'},
+        {l:'F', t:'it is the most consumed drink globally today.'},
+        {l:'G', t:'Catherine of Braganza personally cultivated it.'}
+      ]
+    },
+    /* Dạng MỚI: Matching Table — chọn nhóm A/B/C cho mỗi item */
+    { id:'s4', type:'matching-table', title:'Questions 10–12',
+      instruction:'Choose the correct group, A–C, for each item. NB You may choose any group more than once.',
+      legendTitle:'Where this practice originated',
+      items:[
+        {num:10, statement:'elaborate ceremonies emphasising mindfulness',  answer:'B'},
+        {num:11, statement:'serendipitous discovery of the drink',          answer:'A'},
+        {num:12, statement:'large-scale plantations to lower prices',       answer:'C'}
+      ],
+      legend:[
+        {l:'A', t:'China'},
+        {l:'B', t:'Japan'},
+        {l:'C', t:'India / Britain'}
+      ]
+    },
+    /* Dạng MỚI: Table fill — điền vào bảng */
+    { id:'s5', type:'table-fill', title:'Questions 13–14',
+      instruction:'Complete the table below. Write NO MORE THAN TWO WORDS from the passage for each answer.',
+      headers:['Type of Tea','Compound','Possible benefit'],
+      rows:[
+        ['Green tea', {input:13, answer:'catechins'}, 'May reduce risk of certain cancers'],
+        ['Black tea', '—', {input:14, answer:'cardiovascular health'}]
+      ]
+    },
+    /* Dạng MỚI: Drag-drop — kéo từ trong word bank vào ô trống */
+    { id:'s6', type:'drag-drop', title:'Questions 15–16',
+      instruction:'Complete the summary using the list of words. Click a word in the bank, then click an empty slot to place it.',
+      noteTitle:'Tea today',
+      paragraphs:[
+        {parts:[
+          {text:'Today tea is the second most '},
+          {input:15, answer:'consumed'},
+          {text:' drink in the world. Many of its '},
+          {input:16, answer:'traditional'},
+          {text:' health claims have been confirmed by modern research.'}
+        ]}
+      ],
+      bank:['expensive','consumed','traditional','exotic','popular','ancient','modern']
+    }
   ]
 }
 
@@ -365,11 +446,27 @@ function listAllItems(ex){
     ex.sections.forEach(sec => {
       if (sec.type === 'mcq-multi'){
         out.push({ nums: sec.nums, kind:'mcq-multi', answers: sec.answers, pickN: sec.pickN, explain: sec.explain, qText: sec.instruction, options: sec.options })
+      } else if (sec.type === 'table-fill'){
+        sec.rows.forEach(row => row.forEach(cell => {
+          if (cell && typeof cell === 'object' && cell.input){
+            out.push({ num: cell.input, kind:'fill', answer: cell.answer, qText:'(table cell)' })
+          }
+        }))
+      } else if (sec.type === 'drag-drop'){
+        sec.paragraphs.forEach(p => p.parts.forEach(part => {
+          if (part.input){
+            out.push({ num: part.input, kind:'drag', answer: part.answer, qText:'(gap)' })
+          }
+        }))
       } else {
         sec.items.forEach(it => {
-          const kind = sec.type === 'tfng' ? 'tfng' : sec.type === 'mcq' ? 'mcq' : 'fill'
+          const kind = sec.type === 'tfng' ? 'tfng'
+                     : sec.type === 'mcq' ? 'mcq'
+                     : sec.type === 'matching-endings' ? 'matching-endings'
+                     : sec.type === 'matching-table' ? 'matching-table'
+                     : 'fill'
           out.push({ num: it.num, kind, answer: it.answer, explain: it.explain,
-            qText: it.statement || it.question || `${it.before||''} ___ ${it.after||''}`.trim(),
+            qText: it.statement || it.question || it.sentence || `${it.before||''} ___ ${it.after||''}`.trim(),
             options: it.options })
         })
       }
@@ -536,6 +633,8 @@ const S = {
   selStudent: null, selStudentSubs: {}, selStudentProg: {},
   /* shared view */
   sharedCtx: null,
+  /* drag-drop temp state */
+  dragSelected: null,    // { role, secId, word }
 }
 function set(patch){ Object.assign(S, typeof patch === 'function' ? patch(S) : patch); render() }
 
@@ -776,6 +875,155 @@ function renderSection(sec, answers, submitted, role, opts = {}){
       </div>
       ${correctNote}${explainBlock({num: sec.nums.join(','), explain: sec.explain}, opts)}
     </div>`
+  }
+
+  /* ============= NEW: Matching Endings ============= */
+  if (sec.type === 'matching-endings'){
+    const itemsHtml = sec.items.map(item => {
+      const m = marks[item.num]
+      const cur = answers[item.num] || ''
+      const ringCls = m === 'correct' ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                    : m === 'wrong' ? 'border-rose-500 bg-rose-50 text-rose-800' : 'border-exambr/60 bg-examhi/30'
+      const note = showCorrect && m === 'wrong'
+        ? `<div class="text-[12px] text-moss mt-1 ml-7">→ <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''
+      const dis = submitted ? 'disabled' : ''
+      const onchange = submitted ? '' : `onchange="setAns('${role}',${item.num},this.value)"`
+      const sentence = selectableInline(item.sentence, region, `q-${item.num}-sent`, {withHighlights:hl})
+      return `<div class="q-block q-anchor" id="q-${item.num}">
+        <div class="flex items-start gap-2.5">
+          <span class="q-num-pill flex-shrink-0">${item.num}</span>
+          <span class="text-[14px] text-ink leading-[1.65] flex-1">${sentence}</span>
+          <select class="input-sm w-16 text-center font-semibold ${ringCls}" ${dis} ${onchange}>
+            <option value="">—</option>
+            ${sec.endings.map(e => `<option value="${e.l}" ${cur===e.l?'selected':''}>${e.l}</option>`).join('')}
+          </select>
+        </div>
+        ${note}${explainBlock(item, opts)}
+      </div>`
+    }).join('')
+    const endingsHtml = `<div class="endings-list">
+      <p class="lbl mb-2">List of endings</p>
+      ${sec.endings.map(e => `<div class="row">
+        <span class="l">${e.l}</span>
+        <span>${selectableInline(e.t, region, `q-${sec.id}-end-${e.l}`, {withHighlights:hl})}</span>
+      </div>`).join('')}
+    </div>`
+    body = itemsHtml + endingsHtml
+  }
+
+  /* ============= NEW: Matching Table ============= */
+  if (sec.type === 'matching-table'){
+    const cols = sec.legend.map(l => l.l)
+    const tableHtml = `<div class="overflow-x-auto"><table class="mtable">
+      <thead><tr>
+        <th style="width:60%"></th>
+        ${cols.map(c => `<th class="text-center" style="width:${40/cols.length}%">${c}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${sec.items.map(item => {
+          const m = marks[item.num]
+          const cur = answers[item.num]
+          const stmt = selectableInline(item.statement, region, `q-${item.num}-stmt`, {withHighlights:hl})
+          return `<tr id="q-${item.num}" class="q-anchor">
+            <td><span class="q-num-pill mr-2">${item.num}</span>${stmt}
+              ${showCorrect && m === 'wrong' ? `<div class="text-[12px] text-moss mt-1">→ <strong>${esc(correctOverride[item.num] || item.answer)}</strong></div>` : ''}
+            </td>
+            ${cols.map(c => {
+              const sel = cur === c
+              const cellCls = sel ? (showCorrect ? (m==='correct'?'sel-correct':'sel-wrong') : 'sel') : ''
+              const onclick = submitted ? '' : `onclick="setAns('${role}',${item.num},'${c}')"`
+              return `<td class="cell-radio ${cellCls}" ${onclick}>
+                <input type="radio" class="accent-exambr pointer-events-none" ${sel?'checked':''} ${submitted?'disabled':''}>
+              </td>`
+            }).join('')}
+          </tr>`
+        }).join('')}
+      </tbody>
+    </table></div>
+    <div class="endings-list">
+      <p class="lbl mb-2">${esc(sec.legendTitle || 'Group')}</p>
+      ${sec.legend.map(l => `<div class="row">
+        <span class="l">${l.l}</span><span>${selectableInline(l.t, region, `q-${sec.id}-leg-${l.l}`, {withHighlights:hl})}</span>
+      </div>`).join('')}
+    </div>`
+    body = tableHtml
+  }
+
+  /* ============= NEW: Table Fill ============= */
+  if (sec.type === 'table-fill'){
+    body = `<div class="overflow-x-auto"><table class="mtable">
+      <thead><tr>
+        ${sec.headers.map(h => `<th>${esc(h)}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${sec.rows.map(row => `<tr>
+          ${row.map(cell => {
+            if (cell && typeof cell === 'object' && cell.input){
+              const n = cell.input, m = marks[n]
+              const ringCls = m==='correct'?'border-emerald-500 bg-emerald-50 text-emerald-800'
+                            : m==='wrong'?'border-rose-500 bg-rose-50 text-rose-800'
+                            : 'border-exambr/60 bg-examhi/30'
+              const dis = submitted ? 'disabled' : ''
+              const oninput = submitted ? '' : `oninput="setAns('${role}',${n},this.value)"`
+              const note = showCorrect && m === 'wrong'
+                ? `<div class="text-[11px] text-moss mt-1">→ <strong>${esc(correctOverride[n] || (Array.isArray(cell.answer)?cell.answer.join(' / '):cell.answer))}</strong></div>` : ''
+              return `<td class="q-anchor" id="q-${n}">
+                <span class="q-num-pill mr-1">${n}</span>
+                <input class="input-sm w-32 ${ringCls}" value="${esc(answers[n]||'')}" ${dis} ${oninput}>
+                ${note}
+              </td>`
+            }
+            return `<td>${esc(cell || '')}</td>`
+          }).join('')}
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`
+  }
+
+  /* ============= NEW: Drag & Drop ============= */
+  if (sec.type === 'drag-drop'){
+    const usedWords = new Set()
+    const allInputs = []
+    sec.paragraphs.forEach(p => p.parts.forEach(part => {
+      if (part.input){ allInputs.push(part.input); if (answers[part.input]) usedWords.add(answers[part.input]) }
+    }))
+    const armedSlot = (S.dragSelected && S.dragSelected.role === role && S.dragSelected.secId === sec.id) ? S.dragSelected.word : null
+
+    const paraHtml = sec.paragraphs.map((p, pi) => {
+      let textIdx = 0
+      const segs = p.parts.map(part => {
+        if (part.text){
+          const locKey = `q-${sec.id}-p${pi}-t${textIdx++}`
+          return selectableInline(part.text, region, locKey, {withHighlights:hl})
+        }
+        const n = part.input, val = answers[n] || '', m = marks[n]
+        const slotCls = val
+          ? (showCorrect ? (m==='correct'?'filled correct':m==='wrong'?'filled wrong':'filled') : 'filled')
+          : (armedSlot ? 'armed' : '')
+        const onclick = submitted ? '' : `onclick="dragSlotClick('${role}','${sec.id}',${n})"`
+        const inner = val
+          ? esc(val)
+          : `<span class="q-num-pill" style="width:18px;height:18px;font-size:10px">${n}</span>`
+        const note = showCorrect && m === 'wrong'
+          ? `<sup class="text-[11px] text-moss ml-1">(${esc(part.answer)})</sup>` : ''
+        return `<span class="dslot ${slotCls}" ${onclick}>${inner}</span>${note}`
+      }).join('')
+      return `<p class="text-[14px] leading-[2.2] mb-3 q-anchor" id="q-${allInputs[0] || sec.id}">${segs}</p>`
+    }).join('')
+
+    const bankHtml = `<div class="dbank">
+      <p class="lbl mb-2">📦 Word bank — bấm chọn từ → bấm vào ô trống</p>
+      <div class="flex flex-wrap gap-2">
+        ${sec.bank.map(w => {
+          const used = usedWords.has(w)
+          const isArmed = S.dragSelected && S.dragSelected.role === role && S.dragSelected.secId === sec.id && S.dragSelected.word === w
+          const cls = used ? 'used' : isArmed ? 'sel' : ''
+          const onclick = (submitted || used) ? '' : `onclick="dragWordClick('${role}','${sec.id}','${esc(w)}')"`
+          return `<span class="dword ${cls}" ${onclick}>${esc(w)}</span>`
+        }).join('')}
+      </div>
+    </div>`
+    body = `${sec.noteTitle ? `<p class="text-[14px] font-bold text-ink text-center mb-3">${esc(sec.noteTitle)}</p>` : ''}${paraHtml}${bankHtml}`
   }
 
   return `<div class="mb-7">${header}${body}</div>`
@@ -1139,7 +1387,7 @@ function tabExercise(week, type){
     </div>`
   }
 
-  return `<div class="exam-shell">
+  return `<div class="exam-shell fade-in">
     <div class="exam-header">
       <span class="ielts-logo">IELTS</span>
       <span class="opacity-90">${esc(week.course)} · ${esc(S.user.name)}</span>
@@ -1534,7 +1782,7 @@ function doLogout(){
     view:'login', user:null, subs:{}, prog:{}, students:[], selStudent:null, selCourse:null, selWid:null,
     activeTab:'theory', ansIC:{}, ansHW:{}, submittedIC:false, submittedHW:false,
     rev:{marks:{},comments:{},correct_answers:{},highlights:[]}, revAuto:{}, revAnswers:{},
-    highlights:[], sharedCtx:null, shareUrl:null, resultType:null, expandExplain:{}
+    highlights:[], sharedCtx:null, shareUrl:null, resultType:null, expandExplain:{}, dragSelected:null
   })
 }
 function doPickCourse(cid){ set({ view:'course', selCourse: cid }) }
@@ -1566,13 +1814,33 @@ async function doPickWeek(wid){
 }
 
 async function setTab(tab){
-  set({ activeTab: tab, expandExplain:{} })
-  /* Reload highlights cho sub_type đang xem (đã preload cả 2 lúc pickWeek nên không cần) */
+  set({ activeTab: tab, expandExplain:{}, dragSelected:null })
+  setTimeout(() => window.scrollTo({ top: 0, behavior:'smooth' }), 0)
 }
 
 function setAns(which, n, v){
   if (which === 'IC') set(p => ({ ansIC: {...p.ansIC, [n]: v } }))
   else                set(p => ({ ansHW: {...p.ansHW, [n]: v } }))
+}
+function dragWordClick(role, secId, word){
+  if (S.dragSelected && S.dragSelected.role === role && S.dragSelected.secId === secId && S.dragSelected.word === word){
+    set({ dragSelected: null })
+  } else {
+    set({ dragSelected: { role, secId, word } })
+  }
+}
+function dragSlotClick(role, secId, n){
+  const slot = role === 'IC' ? 'ansIC' : 'ansHW'
+  const cur = { ...S[slot] }
+  if (cur[n]){
+    cur[n] = ''
+    set({ [slot]: cur, dragSelected: null })
+  } else if (S.dragSelected && S.dragSelected.role === role && S.dragSelected.secId === secId){
+    cur[n] = S.dragSelected.word
+    set({ [slot]: cur, dragSelected: null })
+  } else {
+    toast('Chọn 1 từ trong word bank trước','info')
+  }
 }
 function pickMulti(role, numsStr, pickN, letter){
   const nums = numsStr.split(',').map(Number)
