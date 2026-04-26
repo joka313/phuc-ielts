@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Online Centre</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh;background:#f6f5f0;font-family:'Georgia',serif;color:#1a1a1a}
+input,button,textarea,select{font-family:'Georgia',serif}
+.card{background:#fff;border-radius:12px;border:0.5px solid #e2dfd6;padding:20px 22px}
+.label{font-size:11px;font-weight:700;color:#0f6e56;text-transform:uppercase;letter-spacing:.08em}
+.label-amber{font-size:11px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.08em}
+.btn{padding:7px 16px;border-radius:8px;border:0.5px solid #ccc;background:#fff;font-size:13px;cursor:pointer;color:#1a1a1a;transition:background .15s}
+.btn:hover{background:#f5f4ef}
+.btn-dark{padding:7px 16px;border-radius:8px;border:none;background:#1a3a2e;color:#fff;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn-dark:hover{opacity:.88}
+.btn-dark:disabled{opacity:.5;cursor:default}
+.btn-green{padding:7px 16px;border-radius:8px;border:none;background:#0f6e56;color:#fff;font-size:13px;font-weight:500;cursor:pointer}
+.btn-green:hover{opacity:.88}
+.sticky-hd{background:#fff;border-bottom:0.5px solid #e2dfd6;padding:11px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.tab-bar{display:flex;border-bottom:0.5px solid #e2dfd6;background:#fff;padding:0 20px;position:sticky;top:54px;z-index:9}
+.tab-btn{padding:14px 20px;background:none;border:none;font-size:13.5px;font-family:inherit;color:#888;cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.tab-btn.active{color:#1a3a2e;border-bottom-color:#1a3a2e}
+.tab-btn:hover:not(.active){color:#444}
+.week-hero{background:#1a3a2e;color:#fff;padding:24px 28px}
+.week-tag{display:inline-block;background:rgba(218,178,87,.15);color:#dab257;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.06em;margin-bottom:10px}
+.week-hero h1{font-size:22px;font-weight:400;margin-bottom:4px}
+.week-hero p{font-size:13.5px;color:rgba(255,255,255,.7)}
+.form-input{display:inline-block;padding:2px 8px;border-radius:5px;border:0.5px solid #bbb;font-size:13px;font-family:inherit;outline:none;background:#fff;vertical-align:middle}
+.form-input:disabled{background:#f5f5f2;border-color:#ddd}
+.form-input:focus{border-color:#1a3a2e;box-shadow:0 0 0 2px rgba(26,58,46,.1)}
+.form-num{display:inline-flex;align-items:center;justify-content:center;background:#1a3a2e;color:#fff;width:22px;height:22px;border-radius:11px;font-size:11px;font-weight:600;font-family:'Georgia',serif;flex-shrink:0}
+.spinner-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.spinner{width:28px;height:28px;border:2.5px solid #e2dfd6;border-top-color:#1a3a2e;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast{padding:10px 22px;border-radius:8px;font-size:13px;font-weight:500;white-space:nowrap;box-shadow:0 2px 16px rgba(0,0,0,.12)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100}
+.audio-bar{background:#1a3a2e;border-radius:12px;padding:16px 20px;color:#fff;display:flex;align-items:center;gap:14px}
+.audio-bar audio{flex:1;height:38px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="toast-area" class="toast-wrap"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG — Cập nhật nếu đổi project Supabase
+// ═══════════════════════════════════════════════════════════
+const SUPABASE_URL  = 'https://ivdnhulouzogtqhgmxvw.supabase.co'
+const SUPABASE_KEY  = 'sb_publishable_lkW1Agy9bCwUhc4tbHyG7g__jMFLNyg'
+const TEACHER_PASS  = 'gv2025'  // Đổi mật khẩu giáo viên tại đây
+
+const { createClient } = window.supabase
+const db = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+// ═══════════════════════════════════════════════════════════
+// CONTENT — Thêm tuần mới, bài đọc, audio ở đây
+// ═══════════════════════════════════════════════════════════
+const TFNG = ['TRUE','FALSE','NOT GIVEN']
+
+const READING_PASSAGE_INCLASS = [
+  'Urban farming is rapidly transforming how cities think about food production. What began as a fringe movement has evolved into a sophisticated industry, with vertical farms and rooftop gardens now appearing across major metropolitan areas worldwide.',
+  'The appeal of urban farming lies in its efficiency. Traditional agriculture requires vast amounts of land, water, and transportation infrastructure. A vertical farm, by contrast, can produce the same yield as a conventional farm using just 1% of the land area. By stacking growing layers upward rather than spreading outward, urban farmers maximise limited city space. Additionally, advanced hydroponic systems use up to 95% less water than conventional methods by recycling nutrients directly to plant roots.',
+  'Critics argue that urban farms cannot realistically replace rural agriculture at scale. The energy costs of artificial lighting and climate control remain significant barriers. However, proponents point out that as renewable energy becomes cheaper, these concerns will diminish. Furthermore, urban farms eliminate the need for long-distance transportation, reducing carbon emissions and ensuring fresher produce reaches consumers.',
+  'Community impact is another important dimension. Urban farms have been established in food deserts — low-income areas with limited access to fresh produce — in cities such as Detroit and Chicago. These projects not only improve local nutrition but also provide employment and educational opportunities for residents.',
+  'Looking ahead, experts predict that urban farming will not replace but rather complement rural agriculture. By producing high-value crops such as herbs and leafy greens close to consumers, urban farms free up rural land for crops that genuinely benefit from large-scale outdoor cultivation. The future of food may well be a hybrid model that blends the best of both worlds.'
+]
+
+const READING_PASSAGE_HOMEWORK = [
+  'For centuries, tea has held a unique place in cultures around the world. Originating in ancient China, tea was initially used for medicinal purposes before evolving into a beloved daily beverage. Today, it remains the second most consumed drink globally, after water.',
+  'The journey of tea began over 4,000 years ago in southwestern China, where wild tea trees first grew. According to legend, Emperor Shen Nong discovered tea by accident when leaves from a wild tree blew into his pot of boiling water. This serendipitous moment marked the beginning of a tradition that would spread far beyond China\'s borders.',
+  'Tea reached Japan in the 8th century through Buddhist monks who valued it for keeping them alert during meditation. The Japanese subsequently developed elaborate tea ceremonies that emphasised mindfulness and aesthetic beauty. Britain, however, did not embrace tea until the 17th century, when Catherine of Braganza, the Portuguese queen of King Charles II, popularised it among the aristocracy.',
+  'The British East India Company played a controversial role in expanding tea cultivation. To break China\'s monopoly, the company established tea plantations in India, particularly in Assam and Darjeeling regions. These plantations dramatically lowered tea prices and made the drink accessible to all social classes.',
+  'Modern research has confirmed many traditional beliefs about tea\'s health benefits. Green tea contains powerful antioxidants called catechins, which may reduce the risk of certain cancers. Black tea has been linked to improved cardiovascular health, while herbal infusions offer various therapeutic properties without caffeine.'
+]
+
+const READING_INCLASS = {
+  passageTitle: 'Urban Farming Revolution',
+  sections: [
+    { id:'s1', type:'gap-fill', title:'Questions 1–5',
+      instruction:'Complete the notes below. Choose NO MORE THAN TWO WORDS from the passage for each answer.',
+      noteTitle:'Urban Farming – Key Points',
+      items:[
+        {num:1,before:'Vertical farms use only',after:'of the land area of conventional farms.',answer:'1%'},
+        {num:2,before:'Hydroponic systems can reduce',after:'usage by up to 95%.',answer:'water'},
+        {num:3,before:'Urban farms cut carbon emissions by eliminating long-distance',after:'.',answer:'transportation'},
+        {num:4,before:'Low-income areas with little fresh food access are called food',after:'.',answer:'deserts'},
+        {num:5,before:'Urban farming is predicted to',after:'rural agriculture, not replace it.',answer:'complement'}
+      ]},
+    { id:'s2', type:'tfng', title:'Questions 6–10',
+      instruction:'Do the following statements agree with the information given in the reading passage?',
+      items:[
+        {num:6,statement:'Urban farming has always been considered a mainstream agricultural approach.',answer:'FALSE'},
+        {num:7,statement:'Vertical farms can match the output of conventional farms on a fraction of the land.',answer:'TRUE'},
+        {num:8,statement:'High energy costs currently present a challenge for urban farms.',answer:'TRUE'},
+        {num:9,statement:'All urban farm projects in Detroit have been financially profitable.',answer:'NOT GIVEN'},
+        {num:10,statement:'Experts believe urban farms will eventually supply all food consumed in cities.',answer:'FALSE'}
+      ]},
+    { id:'s3', type:'mcq', title:'Questions 11–12',
+      instruction:'Choose the correct letter, A, B, C or D.',
+      items:[
+        {num:11,question:'What does the writer say about hydroponic systems?',
+          options:[{l:'A',t:'They require more land than traditional farming.'},{l:'B',t:'They dramatically reduce water use by recycling nutrients.'},{l:'C',t:'They were first developed in Chicago.'},{l:'D',t:'They are too expensive for most urban farms.'}],answer:'B'},
+        {num:12,question:'What role will urban farming most likely play in the future?',
+          options:[{l:'A',t:'It will completely replace conventional farming.'},{l:'B',t:'It will focus only on grain production.'},{l:'C',t:'It will work alongside rural agriculture as a complementary system.'},{l:'D',t:'It will be discontinued due to high costs.'}],answer:'C'}
+      ]}
+  ]
+}
+
+const READING_HOMEWORK = {
+  passageTitle: 'The Story of Tea',
+  sections: [
+    { id:'s1', type:'gap-fill', title:'Questions 1–4',
+      instruction:'Complete the summary below. Choose NO MORE THAN TWO WORDS from the passage for each answer.',
+      noteTitle:'The History of Tea',
+      items:[
+        {num:1,before:'Tea originated in ancient China where it was first used for',after:'purposes.',answer:'medicinal'},
+        {num:2,before:'Emperor Shen Nong is said to have discovered tea by',after:'.',answer:'accident'},
+        {num:3,before:'Buddhist',after:'introduced tea to Japan in the 8th century.',answer:'monks'},
+        {num:4,before:'The British East India Company set up plantations in India to break China\'s',after:'.',answer:'monopoly'}
+      ]},
+    { id:'s2', type:'tfng', title:'Questions 5–8',
+      instruction:'Do the following statements agree with the information given in the passage?',
+      items:[
+        {num:5,statement:'Tea is currently the most popular drink in the world.',answer:'FALSE'},
+        {num:6,statement:'The Japanese tea ceremony emphasises mindfulness.',answer:'TRUE'},
+        {num:7,statement:'Catherine of Braganza was the wife of King Charles II.',answer:'TRUE'},
+        {num:8,statement:'Indian tea is now more expensive than Chinese tea.',answer:'NOT GIVEN'}
+      ]}
+  ]
+}
+
+const LISTENING_INCLASS = {
+  formTitle: 'Transport Survey',
+  // 🔴 ĐỔI link audio thật vào đây
+  audioUrl: 'https://www.w3schools.com/html/horse.mp3',
+  formItems:[
+    {type:'section',text:'Transport survey',isMain:true},
+    {type:'static',label:'Name:',value:'Sadie Jones'},
+    {type:'static',label:'Year of birth:',value:'1991'},
+    {type:'input',num:1,prefix:'Postcode:',answer:'GE7'},
+    {type:'section',text:'Travelling by bus'},
+    {type:'input',num:2,prefix:'Date of bus journey:',indent:true,answer:'30 October'},
+    {type:'input',num:3,prefix:'Reason for trip: shopping and visit to the',indent:true,answer:'dentist'},
+    {type:'input',num:4,prefix:'Travelled by bus because cost of',suffix:'too high',indent:true,answer:'petrol'},
+    {type:'input',num:5,prefix:'Got on bus at',suffix:'Street',indent:true,answer:'Cornmarket'},
+    {type:'static',label:'Complaints about bus service:',indent:true},
+    {type:'input',num:6,prefix:'• bus today was',indent:true,deep:true,answer:'crowded'},
+    {type:'input',num:7,prefix:'• frequency of buses in the',indent:true,deep:true,answer:'morning'},
+    {type:'section',text:'Travelling by car'},
+    {type:'input',num:8,prefix:'Goes to the',suffix:'by car',indent:true,answer:'supermarket'},
+    {type:'section',text:'Travelling by bicycle'},
+    {type:'input',num:9,prefix:'Dislikes travelling by bike because of the',indent:true,answer:'traffic'},
+    {type:'input',num:10,prefix:'Doesn\'t own a bike because of a lack of',indent:true,answer:'storage'}
+  ]
+}
+
+const LISTENING_HOMEWORK = {
+  formTitle: 'Library Membership',
+  // 🔴 ĐỔI link audio thật vào đây
+  audioUrl: 'https://www.w3schools.com/html/horse.mp3',
+  formItems:[
+    {type:'section',text:'New member registration',isMain:true},
+    {type:'static',label:'Name:',value:'Maria Fernandez'},
+    {type:'input',num:1,prefix:'Date of birth:',answer:'15 June 1995'},
+    {type:'input',num:2,prefix:'Address: 24',suffix:'Road',answer:'Westbrook'},
+    {type:'input',num:3,prefix:'Postcode:',answer:'BS8 4QR'},
+    {type:'input',num:4,prefix:'Email contains the word',answer:'sunset'},
+    {type:'section',text:'Membership preferences'},
+    {type:'input',num:5,prefix:'Type of membership:',indent:true,answer:'family'},
+    {type:'input',num:6,prefix:'Interested in',suffix:'section',indent:true,answer:'history'},
+    {type:'input',num:7,prefix:'Will mainly visit on',indent:true,answer:'weekends'}
+  ]
+}
+
+// 🔴 DANH SÁCH TUẦN — thêm tuần mới vào đây
+// live: true → học viên có thể vào học
+// videoEmbed → link YouTube embed (thay /watch?v=ID thành /embed/ID)
+const WEEKS = [
+  {
+    id:'r1', course:'Reading', wk:'Tuần 1',
+    title:'Gap Fill & Reading Framework',
+    subtitle:'Phương pháp Parallel Reading',
+    live: true,
+    videoEmbed: 'https://www.youtube.com/embed/ZHdQ7nP7Ueg',  // 🔴 đổi link thật
+    docUrl: '',  // 🔴 link Google Drive tài liệu
+    notes:[
+      'Đọc có MỤC TIÊU: highlight keywords trước khi đọc bài',
+      'Quy trình 4 bước: xác định dạng → highlight keywords → áp dụng phương pháp → câu kế tiếp',
+      'Không dịch từng từ. So sánh nghĩa, nhận diện paraphrase',
+      'Câu hỏi cùng 1 bài tập đi theo trình tự bài đọc'
+    ],
+    inClass: READING_INCLASS,
+    homework: READING_HOMEWORK
+  },
+  {
+    id:'l2', course:'Listening', wk:'Tuần 2',
+    title:'Form Filling — Part 1',
+    subtitle:'Hệ thống dự đoán & Tránh lỗi thường gặp',
+    live: true,
+    videoEmbed: 'https://www.youtube.com/embed/ZHdQ7nP7Ueg',  // 🔴 đổi link thật
+    docUrl: '',  // 🔴 link Google Drive tài liệu
+    notes:[
+      'Đọc kỹ giới hạn từ trước khi nghe (VD: NO MORE THAN TWO WORDS)',
+      'Phân tích loại từ cần điền: tên, số, ngày tháng, địa chỉ',
+      'Cẩn thận khi người nói tự sửa lại — thông tin cuối cùng mới là đáp án',
+      'Cặp số dễ nhầm: 13/30, 14/40, 15/50, 18/80 — chú ý trọng âm'
+    ],
+    inClass: LISTENING_INCLASS,
+    homework: LISTENING_HOMEWORK
+  },
+  {id:'r2',course:'Reading',wk:'Tuần 2',title:'Sentence Completion & Short Answer',subtitle:'',live:false},
+  {id:'r3',course:'Reading',wk:'Tuần 3',title:'True / False / Not Given',subtitle:'',live:false},
+  {id:'r4',course:'Reading',wk:'Tuần 4',title:'Multiple Choice Questions',subtitle:'',live:false},
+  {id:'r5',course:'Reading',wk:'Tuần 5',title:'Matching Headings',subtitle:'',live:false},
+  {id:'r6',course:'Reading',wk:'Tuần 6',title:'Matching Names',subtitle:'',live:false},
+  {id:'r7',course:'Reading',wk:'Tuần 7',title:'Which Paragraph Contains',subtitle:'',live:false},
+  {id:'r8',course:'Reading',wk:'Tuần 8',title:'Comprehensive Review',subtitle:'',live:false},
+  {id:'l1',course:'Listening',wk:'Tuần 1',title:'DTT Method & Form Filling',subtitle:'',live:false},
+  {id:'l3',course:'Listening',wk:'Tuần 3',title:'Multiple Choice — P1',subtitle:'',live:false},
+  {id:'l4',course:'Listening',wk:'Tuần 4',title:'Multiple Choice — P2',subtitle:'',live:false},
+  {id:'l5',course:'Listening',wk:'Tuần 5',title:'Matching',subtitle:'',live:false},
+  {id:'l6',course:'Listening',wk:'Tuần 6',title:'Maps',subtitle:'',live:false},
+  {id:'l7',course:'Listening',wk:'Tuần 7',title:'Note Completion — Part 4',subtitle:'',live:false},
+  {id:'l8',course:'Listening',wk:'Tuần 8',title:'Comprehensive Review',subtitle:'',live:false},
+]
+
+// ═══════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════
+function slugify(s){ return String(s).toLowerCase().replace(/\s+/g,'-').replace(/[^\w-]/g,'').slice(0,60) }
+function getWeek(wid){ return WEEKS.find(w=>w.id===wid) }
+function getEx(week,type){ return type==='inClass' ? week.inClass : week.homework }
+
+function countQs(ex){
+  if(!ex) return 0
+  if(ex.formItems) return ex.formItems.filter(i=>i.type==='input').length
+  if(ex.sections) return ex.sections.reduce((a,s)=>a+s.items.length,0)
+  return 0
+}
+function buildEmptyAnswers(ex){
+  const a={}
+  if(!ex) return a
+  if(ex.formItems) ex.formItems.forEach(it=>{ if(it.type==='input') a[it.num]='' })
+  if(ex.sections) ex.sections.forEach(s=>s.items.forEach(i=>{ a[i.num]='' }))
+  return a
+}
+function buildEmptyRev(ex){
+  const r={marks:{},comments:{},highlights:[]}
+  if(!ex) return r
+  if(ex.formItems) ex.formItems.forEach(it=>{ if(it.type==='input'){ r.marks[it.num]=null; r.comments[it.num]='' }})
+  if(ex.sections) ex.sections.forEach(s=>s.items.forEach(i=>{ r.marks[i.num]=null; r.comments[i.num]='' }))
+  return r
+}
+
+// ═══════════════════════════════════════════════════════════
+// SUPABASE HELPERS
+// ═══════════════════════════════════════════════════════════
+async function dbUpsertStudent(name, code){
+  const id = slugify(name+'-'+code)
+  const { error } = await db.from('students').upsert({id,name,class_code:code},{onConflict:'id',ignoreDuplicates:true})
+  if(error) throw error
+  return id
+}
+async function dbLoadStudentData(studentId){
+  const [subsRes, progRes] = await Promise.all([
+    db.from('submissions').select('week_id,sub_type,answers,submitted_at').eq('student_id',studentId),
+    db.from('theory_progress').select('week_id,completed').eq('student_id',studentId)
+  ])
+  const subs={}
+  ;(subsRes.data||[]).forEach(r=>{ subs[r.week_id+'-'+r.sub_type]={answers:r.answers,submittedAt:r.submitted_at} })
+  const prog={}
+  ;(progRes.data||[]).forEach(r=>{ prog[r.week_id]=r.completed })
+  return {subs,prog}
+}
+async function dbSubmit(studentId,weekId,subType,answers){
+  const { error } = await db.from('submissions').upsert(
+    {student_id:studentId,week_id:weekId,sub_type:subType,answers,submitted_at:new Date().toISOString()},
+    {onConflict:'student_id,week_id,sub_type'}
+  )
+  if(error) throw error
+}
+async function dbSaveTheory(studentId,weekId,completed){
+  const { error } = await db.from('theory_progress').upsert(
+    {student_id:studentId,week_id:weekId,completed,updated_at:new Date().toISOString()},
+    {onConflict:'student_id,week_id'}
+  )
+  if(error) throw error
+}
+async function dbLoadAllStudents(){
+  const { data, error } = await db.from('students').select('*').order('created_at',{ascending:false})
+  if(error) throw error
+  return data||[]
+}
+async function dbLoadStudentSubs(studentId){
+  const { data, error } = await db.from('submissions').select('week_id,sub_type,answers').eq('student_id',studentId)
+  if(error) throw error
+  const subs={}
+  ;(data||[]).forEach(r=>{ subs[r.week_id+'-'+r.sub_type]={answers:r.answers} })
+  return subs
+}
+async function dbLoadReview(studentId,weekId,subType){
+  const { data } = await db.from('reviews').select('*').eq('student_id',studentId).eq('week_id',weekId).eq('sub_type',subType).maybeSingle()
+  return data
+}
+async function dbSaveReview(studentId,weekId,subType,rev){
+  const { error } = await db.from('reviews').upsert(
+    {student_id:studentId,week_id:weekId,sub_type:subType,marks:rev.marks,comments:rev.comments,highlights:rev.highlights,updated_at:new Date().toISOString()},
+    {onConflict:'student_id,week_id,sub_type'}
+  )
+  if(error) throw error
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let S = {
+  view:'login', user:null,
+  subs:{}, prog:{},
+  students:[],
+  selStudent:null, selWid:null,
+  activeTab:'theory',
+  ansIC:{}, ansHW:{},
+  submittedIC:false, submittedHW:false,
+  confirmType:null,
+  rev:{marks:{},comments:{},highlights:[]},
+  revType:'inClass',
+  loading:false
+}
+
+function set(patch){
+  Object.assign(S, typeof patch==='function' ? patch(S) : patch)
+  render()
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+let _toastTimer=null
+function toast(msg,type='success'){
+  if(_toastTimer) clearTimeout(_toastTimer)
+  const el=document.getElementById('toast-area')
+  const bg=type==='error'?'#fee2e2':'#d1fae5'
+  const tc=type==='error'?'#991b1b':'#065f46'
+  el.innerHTML=`<div class="toast" style="background:${bg};color:${tc}">${msg}</div>`
+  _toastTimer=setTimeout(()=>{ el.innerHTML='' },3400)
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER HELPERS — passage, form, sections
+// ═══════════════════════════════════════════════════════════
+function passageHTML(paras, highlights, teacher){
+  return paras.map((p,i)=>{
+    const hl = highlights&&highlights.includes(i)
+    const style=`font-size:13.5px;line-height:1.85;padding:7px 9px;border-radius:7px;margin-bottom:8px;${teacher?'cursor:pointer;':''};background:${hl?'#fffde6':'transparent'};border:${hl?'0.5px solid #f0d000':'0.5px solid transparent'}`
+    const onclick=teacher?`onclick="toggleH(${i})"`:''
+    return `<div ${onclick} style="${style}">${p}</div>`
+  }).join('')
+}
+
+function renderSection(sec, answers, submitted, role){
+  let body=''
+  if(sec.type==='gap-fill'){
+    const rows=sec.items.map(item=>`
+      <div style="font-size:13.5px;line-height:2.2;color:#1a1a1a;margin-bottom:4px">
+        <span style="font-weight:500;color:#888;margin-right:4px">${item.num}.</span>${item.before}
+        <input class="form-input" value="${(answers[item.num]||'').replace(/"/g,'&quot;')}"
+          ${submitted?'disabled':''}
+          oninput="setAns('${role==='ic'?'IC':'HW'}',${item.num},this.value)"
+          style="width:120px" placeholder="${item.num}">
+        ${item.after}
+      </div>`).join('')
+    body=`<div style="background:#fafaf7;border:0.5px solid #ebe8df;border-radius:10px;padding:14px 16px">
+      ${sec.noteTitle?`<p style="font-size:12.5px;font-weight:500;margin-bottom:12px">${sec.noteTitle}</p>`:''}${rows}</div>`
+  }
+  if(sec.type==='tfng'){
+    body=sec.items.map(item=>`
+      <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid #f0ede6">
+        <p style="font-size:13.5px;color:#1a1a1a;margin-bottom:8px;line-height:1.6"><span style="font-weight:500;color:#888;margin-right:5px">${item.num}.</span>${item.statement}</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          ${TFNG.map(opt=>`<button onclick="setAns('${role==='ic'?'IC':'HW'}',${item.num},'${opt}')" ${submitted?'disabled':''} style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;border:none;font-family:inherit;cursor:${submitted?'default':'pointer'};background:${answers[item.num]===opt?'#1a3a2e':'#f0ede6'};color:${answers[item.num]===opt?'#fff':'#4a4a4a'}">${opt}</button>`).join('')}
+        </div>
+      </div>`).join('')
+  }
+  if(sec.type==='mcq'){
+    body=sec.items.map(item=>`
+      <div style="margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid #f0ede6">
+        <p style="font-size:13.5px;font-weight:500;color:#1a1a1a;margin-bottom:10px;line-height:1.6"><span style="color:#888;margin-right:5px">${item.num}.</span>${item.question}</p>
+        ${item.options.map(opt=>`
+          <div onclick="${submitted?'':(`setAns('${role==='ic'?'IC':'HW'}',${item.num},'${opt.l}')`)}" style="display:flex;gap:10px;padding:8px 11px;border-radius:8px;margin-bottom:5px;cursor:${submitted?'default':'pointer'};background:${answers[item.num]===opt.l?'#e6f1ec':'transparent'};border:${answers[item.num]===opt.l?'0.5px solid #1a3a2e':'0.5px solid transparent'}">
+            <span style="font-weight:500;font-size:13px;min-width:18px;color:${answers[item.num]===opt.l?'#1a3a2e':'#888'}">${opt.l}</span>
+            <span style="font-size:13.5px;color:#1a1a1a;line-height:1.6">${opt.t}</span>
+          </div>`).join('')}
+      </div>`).join('')
+  }
+  return `<div class="card" style="margin-bottom:14px">
+    <p class="label" style="margin-bottom:4px">${sec.title}</p>
+    <p style="font-size:12.5px;color:#555;font-style:italic;margin-bottom:16px;line-height:1.6">${sec.instruction}</p>
+    ${body}
+  </div>`
+}
+
+function renderFormItems(items, answers, submitted, role){
+  return items.map(it=>{
+    if(it.type==='section'){
+      return `<div style="margin:${it.isMain?'0':'18px'} 0 12px;${it.isMain?'border-bottom:1px solid #e2dfd6;padding-bottom:8px':''}">
+        <${it.isMain?'h2':'h3'} style="font-size:${it.isMain?'17':'14'}px;font-weight:${it.isMain?'500':'700'};color:#1a3a2e">${it.text}</${it.isMain?'h2':'h3'}>
+      </div>`
+    }
+    if(it.type==='static'){
+      const pl=it.deep?'36px':it.indent?'20px':'0'
+      return `<div style="display:flex;align-items:baseline;gap:8px;font-size:13.5px;line-height:2;flex-wrap:wrap;padding-left:${pl}">
+        <span style="font-weight:500;color:#666;min-width:110px">${it.label}</span>
+        <span>${it.value||''}</span>
+      </div>`
+    }
+    if(it.type==='input'){
+      const pl=it.deep?'36px':it.indent?'20px':'0'
+      return `<div style="display:flex;align-items:center;gap:8px;font-size:13.5px;line-height:2.2;flex-wrap:wrap;padding-left:${pl}">
+        ${it.prefix?`<span style="color:#1a1a1a">${it.prefix}</span>`:''}
+        <span class="form-num">${it.num}</span>
+        <input class="form-input" value="${(answers[it.num]||'').replace(/"/g,'&quot;')}"
+          ${submitted?'disabled':''}
+          oninput="setAns('${role==='ic'?'IC':'HW'}',${it.num},this.value)"
+          style="width:140px">
+        ${it.suffix?`<span style="color:#1a1a1a">${it.suffix}</span>`:''}
+      </div>`
+    }
+    return ''
+  }).join('')
+}
+
+// ═══════════════════════════════════════════════════════════
+// VIEWS
+// ═══════════════════════════════════════════════════════════
+function viewLogin(){
+  return `<div style="min-height:100vh;background:#f6f5f0;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div class="card" style="width:100%;max-width:380px;padding:2.5rem 2rem">
+      <p class="label" style="margin-bottom:10px">IELTS Online Centre</p>
+      <h1 style="font-size:22px;font-weight:400;margin-bottom:6px">Đăng nhập</h1>
+      <p style="font-size:12.5px;color:#888;margin-bottom:26px;line-height:1.6">Học viên: tên + mã lớp.&nbsp; Giáo viên: bất kỳ tên + <strong>mật khẩu GV</strong>.</p>
+      <div style="margin-bottom:13px">
+        <label style="font-size:12px;color:#666;display:block;margin-bottom:5px">Họ tên</label>
+        <input id="ln" type="text" placeholder="Nguyễn Văn A" style="width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid #d4d0c8;font-size:13.5px;outline:none;box-sizing:border-box">
+      </div>
+      <div style="margin-bottom:22px">
+        <label style="font-size:12px;color:#666;display:block;margin-bottom:5px">Mã lớp / Mật khẩu GV</label>
+        <input id="lc" type="password" placeholder="Nhập mã..." style="width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid #d4d0c8;font-size:13.5px;outline:none;box-sizing:border-box">
+      </div>
+      <div id="lerr" style="font-size:12px;color:#dc2626;margin-bottom:10px;display:none"></div>
+      <button id="login-btn" class="btn-dark" style="width:100%;padding:11px" onclick="doLogin()">Vào học →</button>
+    </div>
+  </div>`
+}
+
+function viewStudentHome(){
+  const u=S.user, subs=S.subs
+  const reading=WEEKS.filter(w=>w.course==='Reading')
+  const listening=WEEKS.filter(w=>w.course==='Listening')
+  const card=w=>{
+    const ic=subs[w.id+'-inClass'], hw=subs[w.id+'-homework']
+    let badge=''
+    if(!w.live) badge=`<span style="font-size:11px;background:#f0f0ea;color:#aaa;padding:3px 9px;border-radius:20px">Sắp có</span>`
+    else if(ic&&hw) badge=`<span style="font-size:11px;background:#d1fae5;color:#065f46;padding:3px 9px;border-radius:20px;font-weight:500">✓ Hoàn thành</span>`
+    else if(ic) badge=`<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 9px;border-radius:20px;font-weight:500">Còn BTVN</span>`
+    else badge=`<span style="font-size:11px;background:#1a3a2e;color:#fff;padding:3px 9px;border-radius:20px;font-weight:500">Vào học</span>`
+    return `<div onclick="${w.live?`doPickWeek('${w.id}')`:''}" style="background:#fff;border-radius:12px;border:0.5px solid #e2dfd6;padding:16px;cursor:${w.live?'pointer':'default'};opacity:${w.live?1:0.55}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <div style="flex:1">
+          <p style="font-size:11px;color:#dab257;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">${w.wk}</p>
+          <p style="font-size:14px;font-weight:500;color:#1a1a1a;margin:0 0 3px;line-height:1.4">${w.title}</p>
+          ${w.subtitle?`<p style="font-size:12px;color:#888">${w.subtitle}</p>`:''}
+        </div>
+        ${badge}
+      </div>
+    </div>`
+  }
+  const group=(lbl,list)=>`<div style="margin-bottom:26px">
+    <p style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">${lbl}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px">${list.map(card).join('')}</div>
+  </div>`
+  return `<div style="min-height:100vh;padding:28px 16px">
+    <div style="max-width:720px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px">
+        <div><h1 style="font-size:21px;font-weight:400;margin-bottom:3px">Xin chào, ${u.name}</h1><p style="font-size:13px;color:#888">Chọn tuần học để bắt đầu</p></div>
+        <button class="btn" onclick="doLogout()">Đăng xuất</button>
+      </div>
+      ${group('📖 Reading',reading)}${group('🎧 Listening',listening)}
+    </div>
+  </div>`
+}
+
+function viewWeekDetail(){
+  const week=getWeek(S.selWid)
+  if(!week) return ''
+  const tab=S.activeTab
+  let content=''
+  if(tab==='theory') content=tabTheory(week)
+  else if(tab==='inClass') content=tabExercise(week,'inClass')
+  else content=tabExercise(week,'homework')
+
+  const confirmModal=S.confirmType?`<div class="modal-bg">
+    <div class="card" style="max-width:340px;width:90%;padding:2rem;text-align:center">
+      <p style="font-size:17px;font-weight:500;margin-bottom:8px">Xác nhận nộp bài?</p>
+      <p style="font-size:13px;color:#888;margin-bottom:22px;line-height:1.6">Sau khi nộp bạn không thể chỉnh sửa đáp án.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn" onclick="set({confirmType:null})">Huỷ</button>
+        <button class="btn-dark" onclick="doSubmit()">Nộp bài</button>
+      </div>
+    </div>
+  </div>`:''
+
+  return `<div style="min-height:100vh">
+    <div class="sticky-hd">
+      <button class="btn" onclick="set({view:'s-home',selWid:null,activeTab:'theory'})">← Quay lại</button>
+      <span style="flex:1;font-size:13px;color:#888">${week.course}</span>
+    </div>
+    <div class="week-hero">
+      <span class="week-tag">${week.wk}</span>
+      <h1>${week.title}</h1>
+      ${week.subtitle?`<p>${week.subtitle}</p>`:''}
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn ${tab==='theory'?'active':''}" onclick="setTab('theory')">📖 Lý thuyết</button>
+      <button class="tab-btn ${tab==='inClass'?'active':''}" onclick="setTab('inClass')">✏️ Bài tập trên lớp</button>
+      <button class="tab-btn ${tab==='homework'?'active':''}" onclick="setTab('homework')">🏠 Bài tập về nhà</button>
+    </div>
+    <div>${content}</div>
+    ${confirmModal}
+  </div>`
+}
+
+function tabTheory(week){
+  const done=S.prog[week.id]
+  return `<div style="max-width:780px;margin:0 auto;padding:20px 16px">
+    <div style="margin-bottom:20px">
+      <p class="label" style="margin-bottom:10px">📺 Video bài học</p>
+      <div style="aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden">
+        <iframe src="${week.videoEmbed}" style="width:100%;height:100%;border:none" allow="autoplay;encrypted-media;picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;background:#fafaf7">
+      <p class="label-amber" style="margin-bottom:14px">📝 Ghi chú quan trọng</p>
+      <ul style="list-style:none;padding:0">${(week.notes||[]).map(n=>`<li style="display:flex;gap:10px;font-size:13.5px;color:#1a1a1a;margin-bottom:10px;line-height:1.6"><span style="color:#0f6e56;flex-shrink:0;font-weight:700">▸</span><span>${n}</span></li>`).join('')}</ul>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px">
+      ${week.docUrl?`<a href="${week.docUrl}" target="_blank"><button class="btn-dark" style="padding:10px 18px">📄 Mở tài liệu khoá học ↗</button></a>`:`<button class="btn" style="padding:10px 18px;color:#aaa" disabled>📄 Tài liệu sắp có</button>`}
+      <button class="btn" style="background:${done?'#d1fae5':'#fff'};color:${done?'#065f46':'#1a1a1a'};border-color:${done?'#a7f3d0':'#ccc'};padding:10px 18px" onclick="markTheory('${week.id}')">
+        ${done?'✓ Đã hoàn thành lý thuyết':'☐ Đánh dấu hoàn thành'}
+      </button>
+    </div>
+    <div class="card" style="background:#fff8e1;border-color:#f3d97a">
+      <p style="font-size:12px;color:#854F0B;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">💡 Bước tiếp theo</p>
+      <p style="font-size:13.5px;color:#1a1a1a;line-height:1.6">Sau khi xem xong video, chuyển sang tab <strong>Bài tập trên lớp</strong> để làm bài thực hành cùng giáo viên.</p>
+    </div>
+  </div>`
+}
+
+function tabExercise(week, type){
+  const ex=getEx(week,type)
+  if(!ex) return `<div style="padding:60px;text-align:center"><p style="color:#888">Chưa có bài tập</p></div>`
+  const answers=type==='inClass'?S.ansIC:S.ansHW
+  const submitted=type==='inClass'?S.submittedIC:S.submittedHW
+  const total=countQs(ex), filled=Object.values(answers).filter(v=>v&&String(v).trim()).length
+  const subBar=`<div style="background:#fff;border-bottom:0.5px solid #e2dfd6;padding:10px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:54px;z-index:8">
+    <span style="font-size:12.5px;color:#666">${type==='inClass'?'Bài tập trên lớp':'Bài tập về nhà'}</span>
+    <span style="font-size:12px;color:#888;background:#f0ede6;padding:3px 10px;border-radius:20px">${filled}/${total} câu</span>
+    <div style="flex:1"></div>
+    ${submitted?`<span style="font-size:12.5px;background:#d1fae5;color:#065f46;padding:5px 12px;border-radius:20px;font-weight:500">✓ Đã nộp</span>`:
+    `<button class="btn-dark" onclick="trySubmit('${type}')">Nộp bài</button>`}
+  </div>`
+
+  let mainContent=''
+  if(ex.passageTitle){
+    const role=type==='inClass'?'ic':'hw'
+    mainContent=`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:1080px;margin:0 auto;padding:18px 16px">
+      <div class="card" style="height:fit-content;position:sticky;top:120px;max-height:calc(100vh-140px);overflow-y:auto">
+        <p class="label" style="margin-bottom:12px">Bài đọc — ${ex.passageTitle}</p>
+        ${passageHTML(type==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK)}
+      </div>
+      <div>${ex.sections.map(sec=>renderSection(sec,answers,submitted,role)).join('')}</div>
+    </div>`
+  } else {
+    const role=type==='inClass'?'ic':'hw'
+    mainContent=`<div style="max-width:780px;margin:0 auto;padding:18px 16px">
+      <div class="audio-bar" style="margin-bottom:16px;position:sticky;top:120px;z-index:5">
+        <span style="font-size:18px">🎧</span>
+        <div style="flex:1">
+          <p style="font-size:11px;color:#dab257;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Audio bài tập</p>
+          <audio controls preload="metadata" style="width:100%">
+            <source src="${ex.audioUrl}" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+      <div class="card">
+        <p class="label" style="margin-bottom:14px">📋 Form Filling — ${ex.formTitle}</p>
+        <p style="font-size:12.5px;color:#555;font-style:italic;margin-bottom:18px;line-height:1.6">Complete the form below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+        ${renderFormItems(ex.formItems,answers,submitted,role)}
+      </div>
+    </div>`
+  }
+  return subBar+mainContent
+}
+
+function viewTeacherHome(){
+  const list=S.students
+  const liveWeeks=WEEKS.filter(w=>w.live)
+  const rows=list.length===0
+    ?`<div class="card" style="padding:40px;text-align:center"><p style="color:#888">Chưa có học viên nào đăng nhập.</p></div>`
+    :list.map(s=>`<div class="card" style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+        <div><p style="font-size:15px;font-weight:500;margin-bottom:2px">${s.name}</p><p style="font-size:12px;color:#aaa">Mã: ${s.class_code}</p></div>
+      </div>
+      <div style="display:grid;gap:6px">
+        ${liveWeeks.map(w=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fafaf7;border-radius:8px;flex-wrap:wrap">
+          <span style="font-size:11px;color:#dab257;font-weight:700;min-width:52px">${w.wk}</span>
+          <span style="font-size:12.5px;color:#1a1a1a;flex:1">${w.course} — ${w.title}</span>
+          <button class="btn" style="font-size:11.5px;padding:4px 10px" onclick="doOpenReview('${s.id}','${w.id}','inClass')">Xem bài trên lớp</button>
+          <button class="btn" style="font-size:11.5px;padding:4px 10px" onclick="doOpenReview('${s.id}','${w.id}','homework')">Xem BTVN</button>
+        </div>`).join('')}
+      </div>
+    </div>`).join('')
+  return `<div style="min-height:100vh;padding:28px 16px">
+    <div style="max-width:720px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+        <div><p class="label" style="margin-bottom:6px">Teacher Dashboard</p><h1 style="font-size:21px;font-weight:400">Danh sách học viên</h1></div>
+        <button class="btn" onclick="doLogout()">Đăng xuất</button>
+      </div>
+      ${rows}
+    </div>
+  </div>`
+}
+
+function viewTeacherReview(){
+  const {selStudent,selWid,revType,subs,rev}=S
+  const week=getWeek(selWid)
+  const ex=getEx(week,revType)
+  const sub=subs[selWid+'-'+revType]
+  const answers=sub?.answers||{}
+
+  const switchBtn=(other,lbl)=>`<button class="btn" style="font-size:12px;padding:5px 12px" onclick="switchRevType('${other}')">→ ${lbl}</button>`
+  const hd=`<div class="sticky-hd">
+    <button class="btn" onclick="backToTeacher()">← Danh sách</button>
+    <span style="flex:1;font-size:13.5px;font-weight:500">Chữa: ${selStudent.name} — ${week.wk} ${week.course}</span>
+    ${revType==='inClass'?switchBtn('homework','BTVN'):switchBtn('inClass','Bài trên lớp')}
+    <button class="btn-green" onclick="doSaveReview()">Lưu nhận xét</button>
+  </div>
+  <div style="background:#fafaf7;border-bottom:0.5px solid #e2dfd6;padding:9px 20px;position:sticky;top:54px;z-index:8">
+    <span style="font-size:11px;color:#854F0B;font-weight:700;letter-spacing:.07em;text-transform:uppercase">${revType==='inClass'?'📝 Bài tập trên lớp':'🏠 Bài tập về nhà'}</span>
+  </div>`
+
+  if(!sub) return `<div style="min-height:100vh">${hd}
+    <div class="card" style="max-width:480px;margin:40px auto;padding:40px;text-align:center">
+      <p style="color:#888"><strong>${selStudent.name}</strong> chưa nộp ${revType==='inClass'?'bài tập trên lớp':'bài tập về nhà'} của tuần này.</p>
+    </div></div>`
+
+  const revItem=(num,qText,answer)=>`
+    <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid #f0ede6">
+      <p style="font-size:12.5px;color:#555;margin-bottom:7px;line-height:1.6"><span style="font-weight:700;color:#1a1a1a;margin-right:4px">${num}.</span>${qText}</p>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-size:12px;color:#888">Học viên:</span>
+        <span style="font-size:13px;font-weight:500;background:#f6f5f0;padding:3px 11px;border-radius:6px;min-width:40px">${answers[num]||'<em style="color:#bbb;font-weight:400">Chưa trả lời</em>'}</span>
+        <button onclick="setMark(${num},'correct')" style="width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;font-size:15px;font-family:inherit;background:${rev.marks[num]==='correct'?'#dcfce7':'#f0ede6'};color:${rev.marks[num]==='correct'?'#166534':'#888'}">✓</button>
+        <button onclick="setMark(${num},'wrong')" style="width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;font-size:15px;font-family:inherit;background:${rev.marks[num]==='wrong'?'#fee2e2':'#f0ede6'};color:${rev.marks[num]==='wrong'?'#991b1b':'#888'}">✗</button>
+      </div>
+      ${rev.marks[num]==='wrong'&&answer?`<p style="font-size:12px;color:#0f6e56;margin-bottom:7px">Đáp án đúng: <strong>${answer}</strong></p>`:''}
+      <input value="${(rev.comments[num]||'').replace(/"/g,'&quot;')}" oninput="setComment(${num},this.value)"
+        placeholder="Thêm nhận xét..." style="width:100%;font-size:12.5px;padding:7px 11px;border-radius:7px;border:0.5px solid #ddd;outline:none;font-family:inherit;color:#333;box-sizing:border-box">
+    </div>`
+
+  let leftPanel='', rightPanel=''
+  if(ex&&ex.passageTitle){
+    const passage=revType==='inClass'?READING_PASSAGE_INCLASS:READING_PASSAGE_HOMEWORK
+    leftPanel=`<div class="card" style="height:fit-content;position:sticky;top:120px;max-height:calc(100vh-140px);overflow-y:auto">
+      <p class="label" style="margin-bottom:4px">Bài đọc — ${ex.passageTitle}</p>
+      <p style="font-size:11px;color:#aaa;margin-bottom:14px">Click vào đoạn để highlight</p>
+      ${passageHTML(passage,rev.highlights,true)}
+    </div>`
+    rightPanel=ex.sections.map(sec=>`<div class="card" style="margin-bottom:14px">
+      <p class="label" style="margin-bottom:14px">${sec.title}</p>
+      ${sec.items.map(item=>revItem(item.num,item.statement||(item.before+' ___ '+item.after)||item.question,item.answer)).join('')}
+    </div>`).join('')
+  } else if(ex&&ex.formItems){
+    const inputs=ex.formItems.filter(i=>i.type==='input')
+    leftPanel=`<div class="card" style="height:fit-content;position:sticky;top:120px">
+      <p class="label" style="margin-bottom:4px">🎧 Audio — ${ex.formTitle}</p>
+      <audio controls preload="metadata" style="width:100%;margin:12px 0">
+        <source src="${ex.audioUrl}" type="audio/mpeg">
+      </audio>
+      <p style="font-size:12.5px;color:#666;line-height:1.6">Mở audio và nghe lại cùng học viên để chữa từng câu.</p>
+    </div>`
+    rightPanel=`<div class="card"><p class="label" style="margin-bottom:14px">Form: ${ex.formTitle}</p>
+      ${inputs.map(it=>revItem(it.num,(it.prefix||'')+' ___ '+(it.suffix||''),it.answer)).join('')}
+    </div>`
+  }
+
+  return `<div style="min-height:100vh">${hd}
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:1100px;margin:0 auto;padding:18px 16px">
+      ${leftPanel}
+      <div>${rightPanel}</div>
+    </div>
+  </div>`
+}
+
+function viewLoading(){
+  return `<div class="spinner-wrap"><div class="spinner"></div></div>`
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════
+function render(){
+  const root=document.getElementById('root')
+  if(S.loading){ root.innerHTML=viewLoading(); return }
+  if(S.view==='login')      root.innerHTML=viewLogin()
+  else if(S.view==='s-home') root.innerHTML=viewStudentHome()
+  else if(S.view==='week')   root.innerHTML=viewWeekDetail()
+  else if(S.view==='t-home') root.innerHTML=viewTeacherHome()
+  else if(S.view==='t-rev')  root.innerHTML=viewTeacherReview()
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════
+async function doLogin(){
+  const name=document.getElementById('ln')?.value?.trim()
+  const code=document.getElementById('lc')?.value?.trim()
+  const errEl=document.getElementById('lerr')
+  if(!name||!code){ if(errEl){errEl.textContent='Vui lòng nhập đầy đủ.';errEl.style.display='block'} return }
+  if(errEl) errEl.style.display='none'
+  const btn=document.getElementById('login-btn')
+  if(btn){ btn.textContent='Đang xử lý...'; btn.disabled=true }
+
+  try{
+    if(code===TEACHER_PASS){
+      const students=await dbLoadAllStudents()
+      set({view:'t-home',user:{role:'teacher',name:'Giáo viên',id:'teacher'},students})
+      return
+    }
+    const studentId=await dbUpsertStudent(name,code)
+    const {subs,prog}=await dbLoadStudentData(studentId)
+    const user={role:'student',name,id:studentId}
+    set({view:'s-home',user,subs,prog})
+  } catch(e){
+    toast('Lỗi kết nối. Kiểm tra mạng và thử lại.','error')
+    if(btn){ btn.textContent='Vào học →'; btn.disabled=false }
+  }
+}
+
+function doLogout(){
+  set({view:'login',user:null,subs:{},prog:{},students:[],selStudent:null,selWid:null,
+    activeTab:'theory',ansIC:{},ansHW:{},submittedIC:false,submittedHW:false,
+    rev:{marks:{},comments:{},highlights:[]},loading:false})
+}
+
+function doPickWeek(wid){
+  const week=getWeek(wid)
+  if(!week||!week.live) return
+  const ic=S.subs[wid+'-inClass'], hw=S.subs[wid+'-homework']
+  set({
+    view:'week', selWid:wid, activeTab:'theory',
+    ansIC:ic?{...ic.answers}:buildEmptyAnswers(week.inClass),
+    ansHW:hw?{...hw.answers}:buildEmptyAnswers(week.homework),
+    submittedIC:!!ic, submittedHW:!!hw, confirmType:null
+  })
+}
+
+function setTab(tab){ set({activeTab:tab}) }
+
+function setAns(which,n,v){
+  if(which==='IC') set(p=>({ansIC:{...p.ansIC,[n]:v}}))
+  else set(p=>({ansHW:{...p.ansHW,[n]:v}}))
+}
+
+function trySubmit(type){
+  const week=getWeek(S.selWid)
+  const ex=getEx(week,type)
+  const total=countQs(ex)
+  const answers=type==='inClass'?S.ansIC:S.ansHW
+  const filled=Object.values(answers).filter(v=>v&&String(v).trim()).length
+  if(filled<total){ toast(`Còn ${total-filled} câu chưa trả lời.`,'error'); return }
+  set({confirmType:type})
+}
+
+async function doSubmit(){
+  const type=S.confirmType, wid=S.selWid
+  const answers=type==='inClass'?S.ansIC:S.ansHW
+  try{
+    await dbSubmit(S.user.id,wid,type,answers)
+    const updated={...S.subs,[wid+'-'+type]:{answers:{...answers}}}
+    const patch={subs:updated,confirmType:null}
+    if(type==='inClass') patch.submittedIC=true
+    else patch.submittedHW=true
+    set(patch)
+    toast('Nộp bài thành công! 🎉')
+  } catch(e){
+    toast('Lỗi khi nộp bài. Thử lại.','error')
+    set({confirmType:null})
+  }
+}
+
+async function markTheory(wid){
+  const next=!S.prog[wid]
+  try{
+    await dbSaveTheory(S.user.id,wid,next)
+    set(p=>({prog:{...p.prog,[wid]:next}}))
+    toast(next?'Đã đánh dấu hoàn thành lý thuyết':'Đã bỏ đánh dấu')
+  } catch(e){ toast('Lỗi khi lưu.','error') }
+}
+
+async function doOpenReview(studentId,wid,type){
+  set({loading:true})
+  try{
+    const student=S.students.find(s=>s.id===studentId)||{id:studentId,name:'Học viên',class_code:''}
+    const [subs, savedRev]=await Promise.all([
+      dbLoadStudentSubs(studentId),
+      dbLoadReview(studentId,wid,type)
+    ])
+    const week=getWeek(wid)
+    const ex=getEx(week,type)
+    const initRev=buildEmptyRev(ex)
+    if(savedRev){
+      if(savedRev.marks) Object.assign(initRev.marks,savedRev.marks)
+      if(savedRev.comments) Object.assign(initRev.comments,savedRev.comments)
+      if(savedRev.highlights) initRev.highlights=savedRev.highlights
+    }
+    set({view:'t-rev',selStudent:student,selWid:wid,revType:type,subs,rev:initRev,loading:false})
+  } catch(e){
+    toast('Lỗi tải dữ liệu.','error')
+    set({loading:false})
+  }
+}
+
+async function switchRevType(newType){
+  set({loading:true})
+  try{
+    const savedRev=await dbLoadReview(S.selStudent.id,S.selWid,newType)
+    const week=getWeek(S.selWid)
+    const ex=getEx(week,newType)
+    const initRev=buildEmptyRev(ex)
+    if(savedRev){
+      if(savedRev.marks) Object.assign(initRev.marks,savedRev.marks)
+      if(savedRev.comments) Object.assign(initRev.comments,savedRev.comments)
+      if(savedRev.highlights) initRev.highlights=savedRev.highlights
+    }
+    set({revType:newType,rev:initRev,loading:false})
+  } catch(e){ set({loading:false}) }
+}
+
+async function backToTeacher(){
+  set({loading:true})
+  try{
+    const students=await dbLoadAllStudents()
+    set({view:'t-home',students,selStudent:null,selWid:null,loading:false})
+  } catch(e){ set({loading:false}) }
+}
+
+function toggleH(i){
+  set(p=>({rev:{...p.rev,highlights:p.rev.highlights.includes(i)?p.rev.highlights.filter(x=>x!==i):[...p.rev.highlights,i]}}))
+}
+function setMark(n,v){ set(p=>({rev:{...p.rev,marks:{...p.rev.marks,[n]:p.rev.marks[n]===v?null:v}}})) }
+function setComment(n,v){ set(p=>({rev:{...p.rev,comments:{...p.rev.comments,[n]:v}}})) }
+
+async function doSaveReview(){
+  try{
+    await dbSaveReview(S.selStudent.id,S.selWid,S.revType,S.rev)
+    toast('Đã lưu nhận xét!')
+  } catch(e){ toast('Lỗi khi lưu.','error') }
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&S.view==='login') doLogin()
+})
+
+render()
+</script>
+</body>
+</html>
